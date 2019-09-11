@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Сергей Тё](https://up.htmlacademy.ru/javascript/18/user/1123341).
-* Наставник: `Неизвестно`.
+* Наставник: `Арсений Медоев`.
 
 ---
 
