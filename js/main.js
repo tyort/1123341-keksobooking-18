@@ -1,6 +1,6 @@
 'use strict';
 
-var cardGlobal = document.querySelector('.map'); // область в пределах изображения карты
+var cardGlobal = document.querySelector('.map'); // область изображения карты
 cardGlobal.classList.remove('map--faded');
 var mapMarker = document.querySelector('.map__pins'); // карта меток
 var fragment = document.createDocumentFragment();
