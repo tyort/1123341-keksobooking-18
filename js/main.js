@@ -16,15 +16,15 @@ var typeObjkt = ['palace', 'flat', 'house', 'bungalo'];
 for (var i = 0; i < 8; i++) {
   // eslint-disable-next-line object-curly-spacing
   arrayObjkt[i] = { 'author': {}, 'offer': {}, 'location': {} };
-  renderOffer(arrayObjkt[i], i);
-  generateOffer(templateMarker.cloneNode(true), i);
+  generateOffer(arrayObjkt[i], i);
+  renderMarker(templateMarker.cloneNode(true), i);
 }
 
-generateWindow(templateWindow.cloneNode(true), arrayObjkt[0]); // модальное окно для первого элемента
+renderWindow(templateWindow.cloneNode(true), arrayObjkt[0]); // модальное окно для первого элемента
 mapMarker.appendChild(fragmentMarker);
 cardGlobal.insertBefore(fragmentWindow, cardGlobal.querySelector('.map__filters-container'));
 
-function renderOffer(object, index) {
+function generateOffer(object, index) {
   object.location.x = getRandomNumber(50, 1100);
   object.location.y = getRandomNumber(130, 630);
   object.author.avatar = 'img/avatars/user0' + (index + 1) + '.png';
@@ -41,23 +41,23 @@ function renderOffer(object, index) {
   object.offer.photos = getRandomMassive(fotoObjkt, []);
 }
 
-function generateOffer(objectMarker, index) {
+function renderMarker(objectMarker, index) {
   objectMarker.style = 'left: ' + arrayObjkt[index].location.x + 'px; top: ' + arrayObjkt[index].location.y + 'px;';
   objectMarker.children[0].src = arrayObjkt[index].author.avatar;
   objectMarker.children[0].alt = arrayObjkt[index].offer.title;
   fragmentMarker.appendChild(objectMarker);
 }
 
-function generateWindow(windowFirst, object) {
+function renderWindow(windowFirst, object) {
   windowFirst.children[2].textContent = object.offer.title;
   windowFirst.children[3].textContent = object.offer.address;
   windowFirst.children[4].textContent = object.offer.price;
-  windowFirst.children[5].textContent = renderType(typeObjkt, object.offer.type);
-  windowFirst.children[6].textContent = renderRoomsGuests(object.offer.rooms, object.offer.guests);
+  windowFirst.children[5].textContent = generateType(typeObjkt, object.offer.type);
+  windowFirst.children[6].textContent = generateRoomsGuests(object.offer.rooms, object.offer.guests);
   windowFirst.children[7].textContent = 'Заезд после ' + object.offer.checkin + ', выезд до ' + object.offer.checkout + '';
-  renderChild(windowFirst.children[8], object.offer.features);
+  generateChild(windowFirst.children[8], object.offer.features);
   windowFirst.children[9].textContent = object.offer.description;
-  renderPhoto(windowFirst.children[10], windowFirst.children[10].children[0], object.offer.photos);
+  generatePhoto(windowFirst.children[10], windowFirst.children[10].children[0], object.offer.photos);
   fragmentWindow.appendChild(windowFirst);
 }
 
@@ -80,7 +80,7 @@ function getRandomItem(array) {
   return randomItem;
 }
 
-function renderType(massiveOne, type) {
+function generateType(massiveOne, type) {
   var massiveTwo = ['Дворец', 'Квартира', 'Дом', 'Бунгало'];
   for (var j = 0; j < massiveOne.length; j++) {
     if (type === massiveOne[j]) {
@@ -90,7 +90,7 @@ function renderType(massiveOne, type) {
   return newType;
 }
 
-function renderRoomsGuests(rooms, guests) {
+function generateRoomsGuests(rooms, guests) {
   var partOne = 'а';
   if (rooms > 1 && rooms < 5) {
     partOne = 'ы';
@@ -105,20 +105,20 @@ function renderRoomsGuests(rooms, guests) {
   return rooms + ' комнат' + partOne + ' для ' + guests + ' гост' + partTwo;
 }
 
-function renderChild(collection, array) {
+function generateChild(collection, array) {
   for (var j = collection.children.length - 1; j >= array.length; j--) {
     collection.removeChild(collection.children[j]);
   }
   return collection.children;
 }
 
-function renderPhoto(collection, atalon, array) {
+function generatePhoto(collection, example, array) {
   if (array.length) {
     for (var j = 0; j < array.length - 1; j++) {
-      collection.appendChild(atalon.cloneNode(true));
+      collection.appendChild(example.cloneNode(true));
     }
   } else {
-    collection.removeChild(atalon);
+    collection.removeChild(example);
   }
   for (var k = 0; k < array.length; k++) {
     collection.children[k].src = array[k];
@@ -132,31 +132,3 @@ console.log(arrayObjkt);
 console.log(mapMarker);
 // eslint-disable-next-line no-console
 console.log(cardGlobal);
-
-// function renderOffer(index) {
-//   return {
-//     'author': {
-//       'avatar': 'img/avatars/user0' + (index + 1) + '.png'
-//     },
-//     'offer': {
-//       'title': titlObjkt[index],
-//       'address': '' + object.location.x + ', ' + object.location.y + '',
-//       'price': getRandomNumber(1000, 10000),
-//       'type': getRandomItem(typeObjkt),
-//       'rooms': getRandomNumber(1, 5),
-//       'guests': getRandomNumber(1, 3),
-//       'checkin': getRandomItem(['12:00', '13:00', '14:00']),
-//       'checkout': getRandomItem(['12:00', '13:00', '14:00']),
-//       'features': getRandomMassive(featurObjkt, []),
-//       'description': 'Пока не хватает фантазии для описания))',
-//       'photos': getRandomMassive(fotoObjkt, [])
-//     }
-//     'location': {
-//       'x': getRandomNumber(50, 1100)
-//       'y': getRandomNumber(130, 630)
-//     }
-//     object.location.x = ;
-//     object.location.y = ;
-
-//   }
-// }
