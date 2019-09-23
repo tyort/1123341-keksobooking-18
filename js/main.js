@@ -128,6 +128,4 @@ function generatePhoto(collection, Array) {
 // eslint-disable-next-line no-console
 console.log(ArrayObject);
 // eslint-disable-next-line no-console
-console.log(mapMarker);
-// eslint-disable-next-line no-console
 console.log(cardGlobal);
