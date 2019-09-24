@@ -7,64 +7,72 @@ var fragmentMarker = document.createDocumentFragment();
 var fragmentWindow = document.createDocumentFragment();
 var templateMarker = document.querySelector('#pin').content.querySelector('button');
 var templateWindow = document.querySelector('#card').content.querySelector('article');
-var ArrayObject = []; // массив объявлений
-var titlesObject = ['Уютно и дешево', 'Потрать свою зарплату здесь', 'Проведи романтический вечер', 'Здесь не так грустно умереть', 'Мы позволяем все', 'Просто поспать', 'Убеги от жены к нам', 'Холостяцкая опочивальня'];
-var featuresObject = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var photosObject = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var typesObject = ['palace', 'flat', 'house', 'bungalo'];
+var ArrayObj = []; // массив объявлений
+var titlesObj = ['Уютно и дешево', 'Потрать свою зарплату здесь', 'Проведи романтический вечер', 'Здесь не так грустно умереть', 'Мы позволяем все', 'Просто поспать', 'Убеги от жены к нам', 'Холостяцкая опочивальня'];
+var featuresObj = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var photosObj = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+var typesObj = ['palace', 'flat', 'house', 'bungalo'];
 
 for (var i = 0; i < 8; i++) {
-  // eslint-disable-next-line object-curly-spacing
-  ArrayObject[i] = { 'author': {}, 'offer': {}, 'location': {} };
-  generateOffer(ArrayObject[i], i);
-  renderMarker(templateMarker.cloneNode(true), i);
+  ArrayObj.push(generateOffer(i));
+  renderMarker(templateMarker.cloneNode(true), ArrayObj[i], i);
 }
-renderWindow(templateWindow.cloneNode(true), ArrayObject[0]);
+renderWindow(templateWindow.cloneNode(true), ArrayObj[0]);
 
 mapMarker.appendChild(fragmentMarker);
 cardGlobal.insertBefore(fragmentWindow, cardGlobal.querySelector('.map__filters-container'));
 
-function generateOffer(object, index) {
-  object.location.x = getRandomNumber(50, 1100);
-  object.location.y = getRandomNumber(130, 630);
-  object.author.avatar = 'img/avatars/user0' + (index + 1) + '.png';
-  object.offer.title = titlesObject[index];
-  object.offer.address = '' + object.location.x + ', ' + object.location.y + '';
-  object.offer.price = getRandomNumber(1000, 10000);
-  object.offer.type = getRandomItem(typesObject);
-  object.offer.rooms = getRandomNumber(1, 5);
-  object.offer.guests = getRandomNumber(1, 3);
-  object.offer.checkin = getRandomItem(['12:00', '13:00', '14:00']);
-  object.offer.checkout = getRandomItem(['12:00', '13:00', '14:00']);
-  object.offer.features = getRandomArray(featuresObject, []);
-  object.offer.description = 'Пока ничего не придумал:)';
-  object.offer.photos = getRandomArray(photosObject, []);
+function generateOffer(index) {
+  var locationX = getRandomNumber(50, 1100);
+  var locationY = getRandomNumber(130, 630);
+  return {
+    'author': {
+      'avatar': 'img/avatars/user0' + (index + 1) + '.png'
+    },
+    'offer': {
+      'title': titlesObj[index],
+      'address': '' + locationX + ', ' + locationY + '',
+      'price': getRandomNumber(1000, 10000),
+      'type': getRandomItem(typesObj),
+      'rooms': getRandomNumber(1, 5),
+      'guests': getRandomNumber(1, 3),
+      'checkin': getRandomItem(['12:00', '13:00', '14:00']),
+      'checkout': getRandomItem(['12:00', '13:00', '14:00']),
+      'features': getRandomArray(featuresObj, []),
+      'description': 'Пока ничего не придумал:)',
+      'photos': getRandomArray(photosObj, [])
+    },
+    'location': {
+      'x': locationX,
+      'y': locationY
+    }
+  };
 }
 
-function renderMarker(objectMarker, index) {
-  objectMarker.style = 'left: ' + ArrayObject[index].location.x + 'px; top: ' + ArrayObject[index].location.y + 'px;';
-  objectMarker.children[0].src = 'img/avatars/user0' + (index + 1) + '.png';
-  objectMarker.children[0].alt = titlesObject[index];
-  fragmentMarker.appendChild(objectMarker);
+function renderMarker(ObjMarker, ArrObj, index) {
+  ObjMarker.style = 'left: ' + ArrObj.location.x + 'px; top: ' + ArrObj.location.y + 'px;';
+  ObjMarker.children[0].src = 'img/avatars/user0' + (index + 1) + '.png';
+  ObjMarker.children[0].alt = ArrObj.offer.title;
+  fragmentMarker.appendChild(ObjMarker);
 }
 
-function renderWindow(windowFirst, object) {
-  windowFirst.children[0].src = object.author.avatar;
-  windowFirst.children[2].textContent = object.offer.title;
-  windowFirst.children[3].textContent = object.offer.address;
-  windowFirst.children[4].textContent = object.offer.price;
-  windowFirst.children[5].textContent = generateType(typesObject, object.offer.type);
-  windowFirst.children[6].textContent = generateRoomsGuests(object.offer.rooms, object.offer.guests);
-  windowFirst.children[7].textContent = 'Заезд после ' + object.offer.checkin + ', выезд до ' + object.offer.checkout + '';
-  generateChild(windowFirst.children[8], object.offer.features);
-  windowFirst.children[9].textContent = object.offer.description;
-  generatePhoto(windowFirst.children[10], object.offer.photos);
-  fragmentWindow.appendChild(windowFirst);
+function renderWindow(ObjWindow, ArrObj) {
+  ObjWindow.children[0].src = ArrObj.author.avatar;
+  ObjWindow.children[2].textContent = ArrObj.offer.title;
+  ObjWindow.children[3].textContent = ArrObj.offer.address;
+  ObjWindow.children[4].textContent = ArrObj.offer.price;
+  ObjWindow.children[5].textContent = generateType(typesObj, ArrObj.offer.type);
+  ObjWindow.children[6].textContent = generateRoomsGuests(ArrObj.offer.guests, ArrObj.offer.guests);
+  ObjWindow.children[7].textContent = 'Заезд после ' + ArrObj.offer.checkin + ', выезд до ' + ArrObj.offer.checkout + '';
+  generateChild(ObjWindow.children[8], ArrObj.offer.features);
+  ObjWindow.children[9].textContent = ArrObj.offer.description;
+  generatePhoto(ObjWindow.children[10], ArrObj.offer.photos);
+  fragmentWindow.appendChild(ObjWindow);
 }
 
 function getRandomArray(ArrayOne, ArrayTwo) {
-  for (var j = 0; j < getRandomNumber(0, ArrayOne.length); j++) {
-    ArrayTwo.push(ArrayOne[j]);
+  for (var k = 0; k < getRandomNumber(0, ArrayOne.length); k++) {
+    ArrayTwo.push(ArrayOne[k]);
   }
   return ArrayTwo;
 }
@@ -83,9 +91,9 @@ function getRandomItem(Array) {
 
 function generateType(ArrayOne, type) {
   var ArrayTwo = ['Дворец', 'Квартира', 'Дом', 'Бунгало'];
-  for (var j = 0; j < ArrayOne.length; j++) {
-    if (type === ArrayOne[j]) {
-      var newType = ArrayTwo[j];
+  for (var n = 0; n < ArrayOne.length; n++) {
+    if (type === ArrayOne[n]) {
+      var newType = ArrayTwo[n];
     }
   }
   return newType;
@@ -107,14 +115,14 @@ function generateRoomsGuests(rooms, guests) {
 }
 
 function generateChild(collection, Array) {
-  for (var j = collection.children.length - 1; j >= Array.length; j--) {
-    collection.removeChild(collection.children[j]);
+  for (var l = collection.children.length - 1; l >= Array.length; l--) {
+    collection.removeChild(collection.children[l]);
   }
 }
 
 function generatePhoto(collection, Array) {
   if (Array.length) {
-    for (var j = 0; j < Array.length - 1; j++) {
+    for (var m = 0; m < Array.length - 1; m++) {
       collection.appendChild(collection.children[0].cloneNode(true));
     }
   } else {
@@ -126,7 +134,7 @@ function generatePhoto(collection, Array) {
 }
 
 // eslint-disable-next-line no-console
-console.log(ArrayObject);
+console.log(ArrayObj);
 // eslint-disable-next-line no-console
 console.log(mapMarker);
 // eslint-disable-next-line no-console
