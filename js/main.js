@@ -7,17 +7,18 @@ var fragmentMarker = document.createDocumentFragment();
 var fragmentWindow = document.createDocumentFragment();
 var templateMarker = document.querySelector('#pin').content.querySelector('button');
 var templateWindow = document.querySelector('#card').content.querySelector('article');
-var ArrayObj = []; // массив объявлений
-var titlesObj = ['Уютно и дешево', 'Потрать свою зарплату здесь', 'Проведи романтический вечер', 'Здесь не так грустно умереть', 'Мы позволяем все', 'Просто поспать', 'Убеги от жены к нам', 'Холостяцкая опочивальня'];
+var BUILDINGS = []; // массив объявлений
+var TITLES = ['Уютно и дешево', 'Потрать свою зарплату здесь', 'Проведи романтический вечер', 'Здесь не так грустно умереть', 'Мы позволяем все', 'Просто поспать', 'Убеги от жены к нам', 'Холостяцкая опочивальня'];
 var featuresObj = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var photosObj = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var typesObj = ['palace', 'flat', 'house', 'bungalo'];
+var TYPES_TEXTS_MAP = {'palace': 'дворец', 'flat': 'квартира', 'house': 'дом', 'bungalo': 'бунгало'};
 
 for (var i = 0; i < 8; i++) {
-  ArrayObj.push(generateOffer(i));
-  renderMarker(templateMarker.cloneNode(true), ArrayObj[i], i);
+  BUILDINGS.push(generateOffer(i));
+  renderMarker(templateMarker.cloneNode(true), BUILDINGS[i]);
 }
-renderWindow(templateWindow.cloneNode(true), ArrayObj[0]);
+renderWindow(templateWindow.cloneNode(true), BUILDINGS[0]);
 
 mapMarker.appendChild(fragmentMarker);
 cardGlobal.insertBefore(fragmentWindow, cardGlobal.querySelector('.map__filters-container'));
@@ -30,7 +31,7 @@ function generateOffer(index) {
       'avatar': 'img/avatars/user0' + (index + 1) + '.png'
     },
     'offer': {
-      'title': titlesObj[index],
+      'title': TITLES[index],
       'address': '' + locationX + ', ' + locationY + '',
       'price': getRandomNumber(1000, 10000),
       'type': getRandomItem(typesObj),
@@ -49,24 +50,24 @@ function generateOffer(index) {
   };
 }
 
-function renderMarker(ObjMarker, ArrObj, index) {
-  ObjMarker.style = 'left: ' + ArrObj.location.x + 'px; top: ' + ArrObj.location.y + 'px;';
-  ObjMarker.children[0].src = 'img/avatars/user0' + (index + 1) + '.png';
-  ObjMarker.children[0].alt = ArrObj.offer.title;
+function renderMarker(ObjMarker, apartment) {
+  ObjMarker.style = 'left: ' + apartment.location.x + 'px; top: ' + apartment.location.y + 'px;';
+  ObjMarker.children[0].src = apartment.author.avatar;
+  ObjMarker.children[0].alt = apartment.offer.title;
   fragmentMarker.appendChild(ObjMarker);
 }
 
-function renderWindow(ObjWindow, ArrObj) {
-  ObjWindow.children[0].src = ArrObj.author.avatar;
-  ObjWindow.children[2].textContent = ArrObj.offer.title;
-  ObjWindow.children[3].textContent = ArrObj.offer.address;
-  ObjWindow.children[4].textContent = ArrObj.offer.price;
-  ObjWindow.children[5].textContent = generateType(typesObj, ArrObj.offer.type);
-  ObjWindow.children[6].textContent = generateRoomsGuests(ArrObj.offer.guests, ArrObj.offer.guests);
-  ObjWindow.children[7].textContent = 'Заезд после ' + ArrObj.offer.checkin + ', выезд до ' + ArrObj.offer.checkout + '';
-  generateChild(ObjWindow.children[8], ArrObj.offer.features);
-  ObjWindow.children[9].textContent = ArrObj.offer.description;
-  generatePhoto(ObjWindow.children[10], ArrObj.offer.photos);
+function renderWindow(ObjWindow, apartment) {
+  ObjWindow.children[0].src = apartment.author.avatar;
+  ObjWindow.children[2].textContent = apartment.offer.title;
+  ObjWindow.children[3].textContent = apartment.offer.address;
+  ObjWindow.children[4].textContent = apartment.offer.price;
+  ObjWindow.children[5].textContent = TYPES_TEXTS_MAP[apartment.offer.type];
+  ObjWindow.children[6].textContent = generateRoomsGuests(apartment.offer.rooms, apartment.offer.guests);
+  ObjWindow.children[7].textContent = 'Заезд после ' + apartment.offer.checkin + ', выезд до ' + apartment.offer.checkout + '';
+  generateChild(ObjWindow.children[8], apartment.offer.features);
+  ObjWindow.children[9].textContent = apartment.offer.description;
+  generatePhoto(ObjWindow.children[10], apartment.offer.photos);
   fragmentWindow.appendChild(ObjWindow);
 }
 
@@ -87,16 +88,6 @@ function getRandomItem(Array) {
   var index = Math.floor(Math.random() * Array.length);
   var randomItem = Array[index];
   return randomItem;
-}
-
-function generateType(ArrayOne, type) {
-  var ArrayTwo = ['Дворец', 'Квартира', 'Дом', 'Бунгало'];
-  for (var n = 0; n < ArrayOne.length; n++) {
-    if (type === ArrayOne[n]) {
-      var newType = ArrayTwo[n];
-    }
-  }
-  return newType;
 }
 
 function generateRoomsGuests(rooms, guests) {
@@ -134,8 +125,10 @@ function generatePhoto(collection, Array) {
 }
 
 // eslint-disable-next-line no-console
-console.log(ArrayObj);
+console.log(BUILDINGS);
 // eslint-disable-next-line no-console
 console.log(mapMarker);
 // eslint-disable-next-line no-console
 console.log(cardGlobal);
+
+
