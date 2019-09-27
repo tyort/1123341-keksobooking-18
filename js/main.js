@@ -186,22 +186,51 @@ console.log(mapMarker);
 // eslint-disable-next-line no-console
 console.log(cardGlobal);
 
-
-console.log(adForm.children[6].children[1].children[3].value);
-
 var selectRooms = adForm.children[6].children[1];
 var selectGuests = adForm.children[7].children[1];
-console.log(selectRooms);
-console.log(selectGuests);
 
-// setupUserName.addEventListener('change', function () {
-//   if (setupUserName.validity.tooshort || setupUserName.validity.valueMissing) {
-//     setupUserName.setCustomValidity('sssssss');
-//   }
-// });
+if (selectRooms.children[0]) {
+  selectGuests.children[0].setAttribute('disabled', 'disabled');
+  selectGuests.children[1].setAttribute('disabled', 'disabled');
+  selectGuests.children[2].setAttribute('disabled', 'disabled');
+  selectGuests.children[5].setAttribute('disabled', 'disabled');
+}
 
-adForm.addEventListener('change', function () {
-  if (selectRooms.children[1].value > ) {
-    .setCustomValidity('');
+function getRefreshGuests() {
+  for (var j = 0; j < selectGuests.length; j++) {
+    selectGuests.children[j].removeAttribute('disabled');
+    selectGuests.children[j].removeAttribute('selected');
+  }
+}
+
+selectRooms.addEventListener('change', function () {
+  if (selectRooms.children[0].selected) {
+    getRefreshGuests();
+    selectGuests.children[3].setAttribute('selected', 'selected');
+    selectGuests.children[0].setAttribute('disabled', 'disabled');
+    selectGuests.children[1].setAttribute('disabled', 'disabled');
+    selectGuests.children[2].setAttribute('disabled', 'disabled');
+    selectGuests.children[5].setAttribute('disabled', 'disabled');
+  }
+  if (selectRooms.children[1].selected) {
+    getRefreshGuests();
+    selectGuests.children[2].setAttribute('selected', 'selected');
+    selectGuests.children[0].setAttribute('disabled', 'disabled');
+    selectGuests.children[1].setAttribute('disabled', 'disabled');
+    selectGuests.children[5].setAttribute('disabled', 'disabled');
+  }
+  if (selectRooms.children[2].selected) {
+    getRefreshGuests();
+    selectGuests.children[0].setAttribute('selected', 'selected');
+    selectGuests.children[5].setAttribute('disabled', 'disabled');
+  }
+  if (selectRooms.children[3].selected) {
+    getRefreshGuests();
+    selectGuests.children[5].setAttribute('selected', 'selected');
+    selectGuests.children[0].setAttribute('disabled', 'disabled');
+    selectGuests.children[1].setAttribute('disabled', 'disabled');
+    selectGuests.children[2].setAttribute('disabled', 'disabled');
+    selectGuests.children[3].setAttribute('disabled', 'disabled');
+    selectGuests.children[4].setAttribute('disabled', 'disabled');
   }
 });
