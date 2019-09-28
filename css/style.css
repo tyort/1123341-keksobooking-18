@@ -1248,3 +1248,8 @@ fieldset {
   outline: none;
   opacity: 0.6;
 }
+/* мои добавки */
+input:invalid{
+  border-color: #900;
+  background-color: #FDD;
+}
