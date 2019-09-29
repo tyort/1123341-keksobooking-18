@@ -1,7 +1,6 @@
 'use strict';
 
 var cardGlobal = document.querySelector('.map'); // область изображения карты
-cardGlobal.classList.remove('map--faded');
 var mapMarker = document.querySelector('.map__pins'); // карта меток
 var fragmentMarker = document.createDocumentFragment();
 var fragmentWindow = document.createDocumentFragment();
@@ -12,7 +11,47 @@ var TITLES = ['Уютно и дешево', 'Потрать свою зарпл�
 var featuresObj = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var photosObj = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var typesObj = ['palace', 'flat', 'house', 'bungalo'];
-var TYPES_TEXTS_MAP = {'palace': 'дворец', 'flat': 'квартира', 'house': 'дом', 'bungalo': 'бунгало'};
+// eslint-disable-next-line object-curly-spacing
+var TYPES_TEXTS_MAP = { 'palace': 'дворец', 'flat': 'квартира', 'house': 'дом', 'bungalo': 'бунгало' };
+var adForm = document.querySelector('.ad-form');
+var mapFilters = document.querySelector('.map__filters');
+var mapPinMain = cardGlobal.querySelector('.map__pin--main');
+var ENTER_KEYCODE = 13;
+var markCenterXcorrect = parseInt(mapPinMain.style.left, 10) + 35;
+var markCenterYcorrect = parseInt(mapPinMain.style.top, 10) + 35;
+var markEdgeXcorrect = parseInt(mapPinMain.style.left, 10) + 35;
+var markEdgeYcorrect = parseInt(mapPinMain.style.top, 10) + 79;
+getDisabledForm(adForm);
+getDisabledForm(mapFilters);
+fillAdress(markCenterXcorrect, markCenterYcorrect);
+
+mapPinMain.addEventListener('mousedown', function () {
+  activatePage();
+  fillAdress(markEdgeXcorrect, markEdgeYcorrect);
+});
+
+mapPinMain.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    activatePage();
+    fillAdress(markEdgeXcorrect, markEdgeYcorrect);
+  }
+});
+
+function activatePage() {
+  getEnabledForm(adForm);
+  getEnabledForm(mapFilters);
+  cardGlobal.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+}
+
+function fillAdress(x, y) {
+  var part = 'острого конца';
+  if (cardGlobal.classList.contains('map--faded')) {
+    part = 'центра';
+  }
+  var adressText = x + ' расстояние до ' + part + ' по горизонтали, ' + y + ' расстояние до ' + part + ' по вертикали';
+  adForm.children[2].children[1].setAttribute('placeholder', adressText);
+}
 
 for (var i = 0; i < 8; i++) {
   BUILDINGS.push(generateOffer(i));
@@ -91,18 +130,18 @@ function getRandomItem(Array) {
 }
 
 function generateRoomsGuests(rooms, guests) {
-  var partOne = 'а';
+  var part = 'а';
   if (rooms > 1 && rooms < 5) {
-    partOne = 'ы';
+    part = 'ы';
   }
   if (rooms >= 5) {
-    partOne = '';
+    part = '';
   }
   var partTwo = 'я';
   if (guests > 1) {
     partTwo = 'ей';
   }
-  return rooms + ' комнат' + partOne + ' для ' + guests + ' гост' + partTwo;
+  return rooms + ' комнат' + part + ' для ' + guests + ' гост' + partTwo;
 }
 
 function generateChild(collection, Array) {
@@ -124,6 +163,22 @@ function generatePhoto(collection, Array) {
   }
 }
 
+function getDisabledForm(form) {
+  for (var j = 0; j < form.children.length; j++) {
+    if (!form.children[j].getAttribute('disabled')) {
+      form.children[j].setAttribute('disabled', 'disabled');
+    }
+  }
+}
+
+function getEnabledForm(form) {
+  for (var j = 0; j < form.children.length; j++) {
+    if (form.children[j].getAttribute('disabled')) {
+      form.children[j].removeAttribute('disabled');
+    }
+  }
+}
+
 // eslint-disable-next-line no-console
 console.log(BUILDINGS);
 // eslint-disable-next-line no-console
@@ -131,4 +186,51 @@ console.log(mapMarker);
 // eslint-disable-next-line no-console
 console.log(cardGlobal);
 
+var selectRooms = adForm.children[6].children[1];
+var selectGuests = adForm.children[7].children[1];
 
+if (selectRooms.children[0]) {
+  selectGuests.children[0].setAttribute('disabled', 'disabled');
+  selectGuests.children[1].setAttribute('disabled', 'disabled');
+  selectGuests.children[2].setAttribute('disabled', 'disabled');
+  selectGuests.children[5].setAttribute('disabled', 'disabled');
+}
+
+function getRefreshGuests() {
+  for (var j = 0; j < selectGuests.length; j++) {
+    selectGuests.children[j].removeAttribute('disabled');
+    selectGuests.children[j].removeAttribute('selected');
+  }
+}
+
+selectRooms.addEventListener('change', function () {
+  if (selectRooms.children[0].selected) {
+    getRefreshGuests();
+    selectGuests.children[3].setAttribute('selected', 'selected');
+    selectGuests.children[0].setAttribute('disabled', 'disabled');
+    selectGuests.children[1].setAttribute('disabled', 'disabled');
+    selectGuests.children[2].setAttribute('disabled', 'disabled');
+    selectGuests.children[5].setAttribute('disabled', 'disabled');
+  }
+  if (selectRooms.children[1].selected) {
+    getRefreshGuests();
+    selectGuests.children[2].setAttribute('selected', 'selected');
+    selectGuests.children[0].setAttribute('disabled', 'disabled');
+    selectGuests.children[1].setAttribute('disabled', 'disabled');
+    selectGuests.children[5].setAttribute('disabled', 'disabled');
+  }
+  if (selectRooms.children[2].selected) {
+    getRefreshGuests();
+    selectGuests.children[0].setAttribute('selected', 'selected');
+    selectGuests.children[5].setAttribute('disabled', 'disabled');
+  }
+  if (selectRooms.children[3].selected) {
+    getRefreshGuests();
+    selectGuests.children[5].setAttribute('selected', 'selected');
+    selectGuests.children[0].setAttribute('disabled', 'disabled');
+    selectGuests.children[1].setAttribute('disabled', 'disabled');
+    selectGuests.children[2].setAttribute('disabled', 'disabled');
+    selectGuests.children[3].setAttribute('disabled', 'disabled');
+    selectGuests.children[4].setAttribute('disabled', 'disabled');
+  }
+});
