@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 'use strict';
 
 (function () {
+  var mapPins = document.querySelector('.map__pins');
   var mapPinMain = document.querySelector('.map__pin--main');
   var mapFilters = document.querySelector('.map__filters');
   var markCenterXcorrect = parseInt(mapPinMain.style.left, 10) + 35;
@@ -13,9 +15,42 @@
   getDisabledForm(window.data.adForm);
   getDisabledForm(mapFilters);
 
-  mapPinMain.addEventListener('mousedown', function () {
+  // mapPins.offsetHeight = 400;
+
+  mapPinMain.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
     activatePage();
-    fillAdress(markEdgeXcorrect, markEdgeYcorrect);
+    fillAdress((mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79);
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+      mapPinMain.style.top = mapPinMain.offsetTop - shift.y + 'px';
+      mapPinMain.style.left = mapPinMain.offsetLeft - shift.x + 'px';
+      fillAdress(parseInt(mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79);
+      console.log(parseInt(mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79)
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
 
   mapPinMain.addEventListener('keydown', function (evt) {
