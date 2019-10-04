@@ -13,8 +13,8 @@
     house: 5000,
     palace: 10000
   };
-  console.log(selectRooms);
-  console.log(selectGuests);
+  // console.log(selectRooms);
+  // console.log(selectGuests);
 
 
   selectRooms.addEventListener('change', function () {

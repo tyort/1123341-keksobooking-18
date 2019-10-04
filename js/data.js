@@ -5,64 +5,44 @@
   var BUILDINGS = [];
   var mapPins = document.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
-  var TITLES = ['Уютно и дешево', 'Потрать свою зарплату здесь', 'Проведи романтический вечер', 'Здесь не так грустно умереть', 'Мы позволяем все', 'Просто поспать', 'Убеги от жены к нам', 'Холостяцкая опочивальня'];
-  var typesObj = ['palace', 'flat', 'house', 'bungalo'];
-  var featuresObj = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-  var describObj = ['Проводим вечеринки', 'Здесь тусовался Ельцин', 'Подходит бедным и богатым', 'Работаем круглосуточно, приходи под утро'];
-  var photosObj = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
   var ENTER_KEYCODE = 13;
   var cardGlobal = document.querySelector('.map'); // область изображения карты
   var templateWindow = document.querySelector('#card').content.querySelector('article');
+  var templateMarker = document.querySelector('#pin').content.querySelector('button');
+  var fragmentMarker = document.createDocumentFragment();
   cardGlobal.insertBefore(templateWindow.cloneNode(true), cardGlobal.querySelector('.map__filters-container'));
+  window.load(successHandler, errorHandler);
 
-  for (var i = 0; i < 8; i++) {
-    BUILDINGS.push(generateOffer(i));
+  for (var i = 0; i < BUILDINGS.length; i++) {
+    renderMarker(templateMarker.cloneNode(true), BUILDINGS[i]);
+  }
+  console.log(BUILDINGS);
+  console.log(templateMarker);
+  console.log(BUILDINGS[3]); //todo
+  mapPins.appendChild(fragmentMarker);
+
+  function renderMarker(ObjMarker, apartment) {
+    ObjMarker.style = apartment.offer.address;
+    ObjMarker.children[0].src = apartment.author.avatar;
+    ObjMarker.children[0].alt = apartment.offer.title;
+    fragmentMarker.appendChild(ObjMarker);
   }
 
-  function generateOffer(index) {
-    var locationX = getRandomNumber(50, 1100);
-    var locationY = getRandomNumber(130, 630);
-    return {
-      'author': {
-        'avatar': 'img/avatars/user0' + (index + 1) + '.png'
-      },
-      'offer': {
-        'title': TITLES[index],
-        'address': '' + locationX + ', ' + locationY + '',
-        'price': getRandomNumber(1000, 10000),
-        'type': getRandomItem(typesObj),
-        'rooms': getRandomNumber(1, 5),
-        'guests': getRandomNumber(1, 3),
-        'checkin': getRandomItem(['12:00', '13:00', '14:00']),
-        'checkout': getRandomItem(['12:00', '13:00', '14:00']),
-        'features': getRandomArray(featuresObj, []),
-        'description': getRandomItem(describObj),
-        'photos': getRandomArray(photosObj, [])
-      },
-      'location': {
-        'x': locationX,
-        'y': locationY
-      }
-    };
-  }
-
-  function getRandomNumber(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  function getRandomItem(Array) {
-    var index = Math.floor(Math.random() * Array.length);
-    var randomItem = Array[index];
-    return randomItem;
-  }
-
-  function getRandomArray(ArrayOne, ArrayTwo) {
-    for (var k = 0; k < getRandomNumber(0, ArrayOne.length); k++) {
-      ArrayTwo.push(ArrayOne[k]);
+  function successHandler(houses) {
+    for (var j = 0; j < houses.length; j++) {
+      BUILDINGS.push(houses[j]);
     }
-    return ArrayTwo;
+  }
+
+  function errorHandler(errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
   }
 
   window.data = {
@@ -71,10 +51,9 @@
     cardGlobal: cardGlobal,
     adForm: adForm,
     mapPins: mapPins,
-    featuresObj: featuresObj,
-    photosObj: photosObj
+    featuresObj: '',
+    photosObj: ''
   };
-  // console.log(BUILDINGS);
 })();
 
 

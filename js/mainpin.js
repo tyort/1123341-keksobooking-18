@@ -2,7 +2,6 @@
 'use strict';
 
 (function () {
-  var mapPins = document.querySelector('.map__pins');
   var mapPinMain = document.querySelector('.map__pin--main');
   var mapFilters = document.querySelector('.map__filters');
   var markCenterXcorrect = parseInt(mapPinMain.style.left, 10) + 35;
@@ -14,8 +13,6 @@
   fillAdress(markCenterXcorrect, markCenterYcorrect);
   getDisabledForm(window.data.adForm);
   getDisabledForm(mapFilters);
-
-  // mapPins.offsetHeight = 400;
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -40,7 +37,7 @@
       mapPinMain.style.top = mapPinMain.offsetTop - shift.y + 'px';
       mapPinMain.style.left = mapPinMain.offsetLeft - shift.x + 'px';
       fillAdress(parseInt(mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79);
-      console.log(parseInt(mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79)
+      console.log(parseInt(mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79);
     };
 
     var onMouseUp = function (upEvt) {
