@@ -17,7 +17,7 @@
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     activatePage();
-    fillAdress((mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79);
+    fillAdress(parseInt(mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79);
 
     var startCoords = {
       x: evt.clientX,
@@ -26,18 +26,37 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
+
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
       };
+      var newLocationY = mapPinMain.offsetTop - shift.y;
+      var newLocationX = mapPinMain.offsetLeft - shift.x;
+
       startCoords = {
         x: moveEvt.clientX,
         y: moveEvt.clientY
       };
-      mapPinMain.style.top = mapPinMain.offsetTop - shift.y + 'px';
-      mapPinMain.style.left = mapPinMain.offsetLeft - shift.x + 'px';
+
+      if (newLocationX < 0) {
+        mapPinMain.style.left = 0 + 'px';
+      } else if (newLocationX > 1140) {
+        mapPinMain.style.left = 1140 + 'px';
+      } else {
+        mapPinMain.style.left = newLocationX + 'px';
+      }
+
+      if (newLocationY < 100) {
+        mapPinMain.style.top = 100 + 'px';
+      } else if (newLocationY > 630) {
+        mapPinMain.style.top = 630 + 'px';
+      } else {
+        mapPinMain.style.top = newLocationY + 'px';
+      }
+
       fillAdress(parseInt(mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79);
-      console.log(parseInt(mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79);
+
     };
 
     var onMouseUp = function (upEvt) {

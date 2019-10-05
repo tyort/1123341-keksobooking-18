@@ -5,8 +5,12 @@
   var TYPES_TEXTS_MAP = { 'palace': 'дворец', 'flat': 'квартира', 'house': 'дом', 'bungalo': 'бунгало' };
   var mapCard = document.querySelector('.map__card');
 
-  for (var j = 0; j < window.data.BUILDINGS.length; j++) {
-    addPinClickHandler(window.data.mapPins.children[j + 2], window.data.BUILDINGS[j]);
+  window.load(successHandler, '');
+
+  function successHandler(houses) {
+    for (var i = 0; i < houses.length; i++) {
+      addPinClickHandler(window.data.mapPins.children[i + 2], houses[i]);
+    }
   }
 
   function addPinClickHandler(pin, building) {
@@ -20,9 +24,9 @@
       mapCard.children[5].textContent = TYPES_TEXTS_MAP[building.offer.type];
       mapCard.children[6].textContent = generateRoomsGuests(building.offer.rooms, building.offer.guests);
       mapCard.children[7].textContent = 'Заезд после ' + building.offer.checkin + ', выезд до ' + building.offer.checkout;
-      generateFeatures(mapCard.children[8], building.offer.features.length);
+      getFeaturesToDOM(mapCard.children[8], building.offer.features);
       mapCard.children[9].textContent = building.offer.description;
-      generatePhotos(mapCard.children[10], building.offer.photos.length);
+      getPhotosToDOM(mapCard.children[10], building.offer.photos);
     });
   }
 
@@ -40,27 +44,25 @@
     }
     return rooms + ' комнат' + part + ' для ' + guests + ' гост' + partTwo;
   }
-  // создание тегов li
-  function generateFeatures(list, length) {
-    for (var k = 0; k < length; k++) {
+
+  function getFeaturesToDOM(list, features) {
+    for (var i = 0; i < features.length; i++) {
       var newElement = document.createElement('li');
-      newElement.className = 'popup__feature popup__feature--' + window.data.featuresObj[k];
+      newElement.className = 'popup__feature popup__feature--' + features[i];
       list.appendChild(newElement);
     }
-    return list.children;
   }
-  // создание тегов img
-  function generatePhotos(list, length) {
-    for (var p = 0; p < length; p++) {
+
+  function getPhotosToDOM(list, photos) {
+    for (var i = 0; i < photos.length; i++) {
       var newElement = document.createElement('img');
-      newElement.setAttribute('src', window.data.photosObj[p]);
+      newElement.setAttribute('src', photos[i]);
       newElement.className = 'popup__photo';
       newElement.setAttribute('width', 45);
       newElement.setAttribute('height', 40);
       newElement.setAttribute('alt', 'Фотография жилья');
       list.appendChild(newElement);
     }
-    return list.children;
   }
 })();
 
