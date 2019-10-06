@@ -1253,3 +1253,7 @@ input:invalid{
   border-color: #900;
   background-color: #FDD;
 }
+
+.delete_advert {
+  display: none;
+}

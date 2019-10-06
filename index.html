@@ -100,11 +100,11 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" minlength="30" maxlength="100">
+          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" minlength="30" maxlength="100" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес</label>
-          <input id="address" name="address" type="text">
+          <input id="address" name="address" type="text" readonly>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -117,16 +117,16 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <input id="price" name="price" type="number" placeholder="5000" min="1000" max="1000000">
+          <input id="price" name="price" type="number" placeholder="5000" min="1000" max="1000000" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
           <label class="ad-form__label" for="timein">Время заезда и выезда</label>
-          <select id="timein" name="timein">
+          <select id="timein" name="timein" onchange="timeout.value=timein.value;">
             <option value="12:00" selected>После 12</option>
             <option value="13:00">После 13</option>
             <option value="14:00">После 14</option>
           </select>
-          <select id="timeout" name="timeout" title="Time to go out">
+          <select id="timeout" name="timeout" title="Time to go out" onchange="timein.value=timeout.value;">
             <option value="12:00" selected>Выезд до 12</option>
             <option value="13:00">Выезд до 13</option>
             <option value="14:00">Выезд до 14</option>
@@ -144,12 +144,12 @@
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="capacity">Количество мест</label>
           <select id="capacity" name="capacity">
-            <option value="5" disabled>для 5 гостей</option>
-            <option value="4" disabled>для 4 гостей</option>
-            <option value="3" disabled>для 3 гостей</option>
-            <option value="2">для 2 гостей</option>
             <option value="1" selected>для 1 гостя</option>
-            <option value="0" disabled>только для котов</option>
+            <option value="2">для 2 гостей</option>
+            <option value="3" disabled>для 3 гостей</option>
+            <option value="4" disabled>для 4 гостей</option>
+            <option value="5" disabled>для 5 гостей</option>
+            <option value="100" disabled>только для котов</option>
           </select>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide features">
@@ -225,7 +225,9 @@
 
   <!-- Метка объявления -->
   <template id="pin">
-    <button type="button" class="map__pin" style="left: 200px; top: 400px;"><img src="img/avatars/user07.png" width="40" height="40" draggable="false" alt="Метка объявления"></button>
+    <button type="button" class="map__pin" style="left: 200px; top: 400px;">
+      <img src="img/avatars/user07.png" width="40" height="40" draggable="false" alt="Метка объявления">
+    </button>
   </template>
 
   <!-- Сообщение об успешном создании объявления -->
@@ -242,10 +244,9 @@
       <button class="error__button" href="#">Попробовать снова</button>
     </div>
   </template>
+  <script src="js/load.js"></script>
   <script src="js/data.js"></script>
-  <script src="js/pin.js"></script>
   <script src="js/mainpin.js"></script>
   <script src="js/form.js"></script>
-  <script src="js/advert.js"></script>
 </body>
 </html>
