@@ -4,20 +4,15 @@
 (function () {
   var mapPinMain = document.querySelector('.map__pin--main');
   var mapFilters = document.querySelector('.map__filters');
-  var markCenterXcorrect = parseInt(mapPinMain.style.left, 10) + 35;
-  var markCenterYcorrect = parseInt(mapPinMain.style.top, 10) + 35;
-  var markEdgeXcorrect = parseInt(mapPinMain.style.left, 10) + 35;
-  var markEdgeYcorrect = parseInt(mapPinMain.style.top, 10) + 79;
-  var adds = document.querySelector('#address');
 
-  fillAdress(markCenterXcorrect, markCenterYcorrect);
+  window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
   getDisabledForm(window.data.adForm);
   getDisabledForm(mapFilters);
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     activatePage();
-    fillAdress(parseInt(mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79);
+    window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
 
     var startCoords = {
       x: evt.clientX,
@@ -55,7 +50,7 @@
         mapPinMain.style.top = newLocationY + 'px';
       }
 
-      fillAdress(parseInt(mapPinMain.style.left, 10) + 35, parseInt(mapPinMain.style.top, 10) + 79);
+      window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
 
     };
 
@@ -72,7 +67,7 @@
   mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.data.ENTER_KEYCODE) {
       activatePage();
-      fillAdress(markEdgeXcorrect, markEdgeYcorrect);
+      window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
     }
   });
 
@@ -99,12 +94,4 @@
     }
   }
 
-  function fillAdress(x, y) {
-    var part = 'острого конца';
-    if (window.data.cardGlobal.classList.contains('map--faded')) {
-      part = 'центра';
-    }
-    var adressText = x + ' расстояние до ' + part + ' по горизонтали, ' + y + ' расстояние до ' + part + ' по вертикали';
-    adds.setAttribute('placeholder', adressText);
-  }
 })();
