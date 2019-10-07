@@ -3,7 +3,7 @@
 (function () {
   var URLget = 'https://js.dump.academy/keksobooking/data';
 
-  window.load = function (onSuccess, onError) {
+  window.load = function (onSuccess) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -11,14 +11,14 @@
       if (xhr.status === 200) {
         onSuccess(xhr.response);
       } else {
-        onError();
+        onHousesError();
       }
     });
     xhr.addEventListener('error', function () {
-      onError();
+      onHousesError();
     });
     xhr.addEventListener('timeout', function () {
-      onError();
+      onHousesError();
     });
 
     xhr.timeout = 10000; // 10s
@@ -34,9 +34,20 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      onSuccess(xhr.response);
+      if (xhr.status === 200) {
+        onSuccess(xhr.response);
+      } else {
+        onHousesError();
+      }
+    });
+    xhr.addEventListener('error', function () {
+      onHousesError();
+    });
+    xhr.addEventListener('timeout', function () {
+      onHousesError();
     });
 
+    xhr.timeout = 3000; // 3s
     xhr.open('POST', URLpost);
     xhr.send(data);
   };
@@ -89,5 +100,29 @@
       list.appendChild(newElement);
     }
   };
+
+
+  window.addClassName = function (mainName, firstIndex, className) {
+    var element = document.getElementsByClassName(mainName);
+    for (var i = firstIndex; i < element.length; i++) {
+      element[i].classList.add(className);
+    }
+  };
+
+
+  window.deleteClassName = function (mainName, firstIndex, className) {
+    var element = document.getElementsByClassName(mainName);
+    for (var i = firstIndex; i < element.length; i++) {
+      element[i].classList.remove(className);
+    }
+  };
+
+  function onHousesError() {
+    var templateError = document.querySelector('#error').content.querySelector('div');
+    var node = templateError.cloneNode(true);
+    document.getElementsByTagName('main')[0].insertAdjacentElement('afterbegin', node);
+    return node;
+  }
+
 })();
 

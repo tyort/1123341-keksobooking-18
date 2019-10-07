@@ -5,6 +5,7 @@
   var mapPins = document.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
   var ENTER_KEYCODE = 13;
+  var ESCAPE_KEYCODE = 27;
   var cardGlobal = document.querySelector('.map'); // область изображения карты
   var templateWindow = document.querySelector('#card').content.querySelector('article');
   var templateMarker = document.querySelector('#pin').content.querySelector('button');
@@ -13,8 +14,9 @@
   // eslint-disable-next-line object-curly-spacing
   var TYPES_TEXTS_MAP = { 'palace': 'дворец', 'flat': 'квартира', 'house': 'дом', 'bungalo': 'бунгало' };
   var mapCard = document.querySelector('.map__card');
+  mapCard.classList.add('delete_advert');
 
-  window.load(onHousesSuccess, onHousesError);
+  window.load(onHousesSuccess);
 
   function onHousesSuccess(houses) {
     renderPinHouses(houses);
@@ -35,6 +37,7 @@
     element.style.left = houseUnit.location.x + 'px';
     element.style.top = houseUnit.location.y + 'px';
     element.getElementsByTagName('img')[0].src = houseUnit.author.avatar;
+    element.classList.add('delete_advert');
     return element;
   }
 
@@ -61,24 +64,26 @@
     });
   }
 
-  function onHousesError() {
-    var templateError = document.querySelector('#error').content.querySelector('div');
-    var node = templateError.cloneNode(true);
-    document.getElementsByTagName('main')[0].insertAdjacentElement('afterbegin', node);
-    return node;
-  }
 
-  // function wwefewfefe() {
-  //   for (var i = 2; i < mapPins.children.length; i++) {
-  //     mapPins.children[i].classList.add('delete_advert');
-  //   }
-  // }
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.data.ESCAPE_KEYCODE) {
+      var element = document.getElementsByClassName('error')[0];
+      element.remove();
+    }
+  });
+
+  document.addEventListener('click', function () {
+    var element = document.getElementsByClassName('error')[0];
+    element.remove();
+  });
 
   window.data = {
     ENTER_KEYCODE: ENTER_KEYCODE,
+    ESCAPE_KEYCODE: ESCAPE_KEYCODE,
     cardGlobal: cardGlobal,
     adForm: adForm,
     mapPins: mapPins,
-    adds: adds
+    adds: adds,
+    mapCard: mapCard
   };
 })();

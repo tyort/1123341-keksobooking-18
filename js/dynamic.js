@@ -12,6 +12,7 @@
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     activatePage();
+
     window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
 
     var startCoords = {
@@ -76,6 +77,8 @@
     getEnabledForm(mapFilters);
     window.data.cardGlobal.classList.remove('map--faded');
     window.data.adForm.classList.remove('ad-form--disabled');
+    window.deleteClassName('map__pin', 1, 'delete_advert');
+    window.deleteClassName('map__card', 0, 'delete_advert');
   }
 
   function getDisabledForm(form) {
@@ -93,5 +96,39 @@
       }
     }
   }
+
+  window.data.adForm.addEventListener('submit', function (evt) {
+    window.upload(new FormData(window.data.adForm), function () {
+      mapPinMain.style.left = 520 + 'px';
+      mapPinMain.style.top = 320 + 'px';
+      window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
+      window.data.adForm.reset();
+      window.addClassName('map__pin', 1, 'delete_advert');
+      window.addClassName('map__card', 0, 'delete_advert');
+      window.addClassName('ad-form', 0, 'ad-form--disabled');
+      window.addClassName('map', 0, 'map--faded');
+      onSuccessReport();
+    });
+    evt.preventDefault();
+  });
+
+  function onSuccessReport() {
+    var templateError = document.querySelector('#success').content.querySelector('div');
+    var node = templateError.cloneNode(true);
+    document.getElementsByTagName('main')[0].insertAdjacentElement('afterbegin', node);
+    return node;
+  }
+
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.data.ESCAPE_KEYCODE) {
+      var element = document.getElementsByClassName('success')[0];
+      element.remove();
+    }
+  });
+
+  document.addEventListener('click', function () {
+    var element = document.getElementsByClassName('success')[0];
+    element.remove();
+  });
 
 })();
