@@ -2,18 +2,18 @@
 'use strict';
 
 (function () {
-  var mapPinMain = document.querySelector('.map__pin--main');
+
   var mapFilters = document.querySelector('.map__filters');
 
-  window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
+  window.fillAdress(parseInt(window.data.mapPinMain.style.left, 10), parseInt(window.data.mapPinMain.style.top, 10), window.data.adds);
   getDisabledForm(window.data.adForm);
   getDisabledForm(mapFilters);
 
-  mapPinMain.addEventListener('mousedown', function (evt) {
+  window.data.mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     activatePage();
 
-    window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
+    window.fillAdress(parseInt(window.data.mapPinMain.style.left, 10), parseInt(window.data.mapPinMain.style.top, 10), window.data.adds);
 
     var startCoords = {
       x: evt.clientX,
@@ -27,8 +27,8 @@
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
       };
-      var newLocationY = mapPinMain.offsetTop - shift.y;
-      var newLocationX = mapPinMain.offsetLeft - shift.x;
+      var newLocationY = window.data.mapPinMain.offsetTop - shift.y;
+      var newLocationX = window.data.mapPinMain.offsetLeft - shift.x;
 
       startCoords = {
         x: moveEvt.clientX,
@@ -36,22 +36,22 @@
       };
 
       if (newLocationX < 0) {
-        mapPinMain.style.left = 0 + 'px';
+        window.data.mapPinMain.style.left = 0 + 'px';
       } else if (newLocationX > 1140) {
-        mapPinMain.style.left = 1140 + 'px';
+        window.data.mapPinMain.style.left = 1140 + 'px';
       } else {
-        mapPinMain.style.left = newLocationX + 'px';
+        window.data.mapPinMain.style.left = newLocationX + 'px';
       }
 
       if (newLocationY < 100) {
-        mapPinMain.style.top = 100 + 'px';
+        window.data.mapPinMain.style.top = 100 + 'px';
       } else if (newLocationY > 630) {
-        mapPinMain.style.top = 630 + 'px';
+        window.data.mapPinMain.style.top = 630 + 'px';
       } else {
-        mapPinMain.style.top = newLocationY + 'px';
+        window.data.mapPinMain.style.top = newLocationY + 'px';
       }
 
-      window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
+      window.fillAdress(parseInt(window.data.mapPinMain.style.left, 10), parseInt(window.data.mapPinMain.style.top, 10), window.data.adds);
 
     };
 
@@ -65,10 +65,10 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  mapPinMain.addEventListener('keydown', function (evt) {
+  window.data.mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.data.ENTER_KEYCODE) {
       activatePage();
-      window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
+      window.fillAdress(parseInt(window.data.mapPinMain.style.left, 10), parseInt(window.data.mapPinMain.style.top, 10), window.data.adds);
     }
   });
 
@@ -96,39 +96,5 @@
       }
     }
   }
-
-  window.data.adForm.addEventListener('submit', function (evt) {
-    window.upload(new FormData(window.data.adForm), function () {
-      mapPinMain.style.left = 520 + 'px';
-      mapPinMain.style.top = 320 + 'px';
-      window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
-      window.data.adForm.reset();
-      window.addClassName('map__pin', 1, 'delete_advert');
-      window.addClassName('map__card', 0, 'delete_advert');
-      window.addClassName('ad-form', 0, 'ad-form--disabled');
-      window.addClassName('map', 0, 'map--faded');
-      onSuccessReport();
-    });
-    evt.preventDefault();
-  });
-
-  function onSuccessReport() {
-    var templateError = document.querySelector('#success').content.querySelector('div');
-    var node = templateError.cloneNode(true);
-    document.getElementsByTagName('main')[0].insertAdjacentElement('afterbegin', node);
-    return node;
-  }
-
-  document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.data.ESCAPE_KEYCODE) {
-      var element = document.getElementsByClassName('success')[0];
-      element.remove();
-    }
-  });
-
-  document.addEventListener('click', function () {
-    var element = document.getElementsByClassName('success')[0];
-    element.remove();
-  });
 
 })();

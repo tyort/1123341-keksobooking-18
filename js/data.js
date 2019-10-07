@@ -3,6 +3,7 @@
 
 (function () {
   var mapPins = document.querySelector('.map__pins');
+  var mapPinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var ENTER_KEYCODE = 13;
   var ESCAPE_KEYCODE = 27;
@@ -64,22 +65,10 @@
     });
   }
 
-
-  document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.data.ESCAPE_KEYCODE) {
-      var element = document.getElementsByClassName('error')[0];
-      element.remove();
-    }
-  });
-
-  document.addEventListener('click', function () {
-    var element = document.getElementsByClassName('error')[0];
-    element.remove();
-  });
-
   window.data = {
     ENTER_KEYCODE: ENTER_KEYCODE,
     ESCAPE_KEYCODE: ESCAPE_KEYCODE,
+    mapPinMain: mapPinMain,
     cardGlobal: cardGlobal,
     adForm: adForm,
     mapPins: mapPins,
