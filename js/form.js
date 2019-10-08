@@ -7,7 +7,9 @@
   var selectGuests = document.getElementById('capacity');
   var type = document.getElementById('type');
   var options = selectGuests.getElementsByTagName('option');
-  var mapPinMain = document.querySelector('.map__pin--main');
+  var userTitleInput = document.getElementById('title');
+  var userPriceInput = document.getElementById('price');
+
   var TYPES_PRICES_MAP = {
     bungalo: 0,
     flat: 1000,
@@ -39,9 +41,8 @@
     }
   });
 
-
   type.addEventListener('change', function () {
-    var selectedType = document.getElementById('type').value;
+    var selectedType = type.value;
     document.getElementById('price').min = TYPES_PRICES_MAP[selectedType];
   });
 
@@ -51,22 +52,36 @@
     }
   }
 
-  window.data.adForm.addEventListener('submit', function (evt) {
-    window.upload(new FormData(window.data.adForm), function () {
-      window.data.adForm.classList.add('ad-form--disabled');
-      window.data.cardGlobal.classList.add('map--faded');
-      mapPinMain.style.left = 520 + 'px';
-      mapPinMain.style.top = 320 + 'px';
-      window.fillAdress(parseInt(mapPinMain.style.left, 10), parseInt(mapPinMain.style.top, 10), window.data.adds);
-      window.data.adForm.reset();
-
-    });
-    evt.preventDefault();
+  userTitleInput.addEventListener('invalid', function () {
+    if (userTitleInput.validity.tooShort) {
+      userTitleInput.setCustomValidity('Не ленись, заполни меня полностью!');
+    } else if (userTitleInput.validity.valueMissing) {
+      userTitleInput.setCustomValidity('Не оставляй меня пустым');
+    } else {
+      userTitleInput.setCustomValidity('');
+    }
   });
 
-  // function wwefewfefe() {
-  //   for (var i = 2; i < mapPins.children.length; i++) {
-  //     mapPins.children[i].classList.add('delete_advert');
-  //   }
-  // }
+  userTitleInput.addEventListener('input', function (evt) {
+    evt.preventDefault();
+    var target = evt.target;
+    if (target.value.length < 15) {
+      target.setCustomValidity('Поднажми, друг. Еще несколько символов!');
+    } else {
+      target.setCustomValidity('');
+    }
+  });
+
+  userPriceInput.addEventListener('invalid', function () {
+    if (userPriceInput.validity.rangeUnderflow) {
+      userPriceInput.setCustomValidity('Денег нет - спи на улице!');
+    } else if (userPriceInput.validity.rangeOverflow) {
+      userPriceInput.setCustomValidity('Найди подешевле и одолжи мне денег');
+    } else if (userPriceInput.validity.valueMissing) {
+      userPriceInput.setCustomValidity('А деньги? А если найду?');
+    } else {
+      userPriceInput.setCustomValidity('');
+    }
+  });
+
 })();
