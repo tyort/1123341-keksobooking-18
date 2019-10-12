@@ -77,8 +77,8 @@
     getEnabledForm(mapFilters);
     window.data.cardGlobal.classList.remove('map--faded');
     window.data.adForm.classList.remove('ad-form--disabled');
-    window.deleteClassName('map__pin', 1, 'delete_advert');
     window.deleteClassName('map__card', 0, 'delete_advert');
+    window.deleteClassName('map__pin', 0, 'delete_advert');
   }
 
   function getDisabledForm(form) {

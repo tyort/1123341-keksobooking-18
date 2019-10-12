@@ -37,6 +37,7 @@
     element.style.left = houseUnit.location.x + 'px';
     element.style.top = houseUnit.location.y + 'px';
     element.getElementsByTagName('img')[0].src = houseUnit.author.avatar;
+    element.className = 'delete_advert map__pin';
     fragmentMarker.appendChild(element);
     mapPins.appendChild(fragmentMarker);
   }
