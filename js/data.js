@@ -3,49 +3,42 @@
 
 (function () {
   var mapPins = document.querySelector('.map__pins');
-  var mapPinMain = document.querySelector('.map__pin--main');
-  var adForm = document.querySelector('.ad-form');
-  var ENTER_KEYCODE = 13;
-  var ESCAPE_KEYCODE = 27;
-  var cardGlobal = document.querySelector('.map'); // область изображения карты
+  var cardGlobal = document.querySelector('.map');
   var templateWindow = document.querySelector('#card').content.querySelector('article');
   var templateMarker = document.querySelector('#pin').content.querySelector('button');
-  var adds = document.querySelector('#address');
   cardGlobal.insertBefore(templateWindow.cloneNode(true), cardGlobal.querySelector('.map__filters-container'));
   // eslint-disable-next-line object-curly-spacing
   var TYPES_TEXTS_MAP = { 'palace': 'дворец', 'flat': 'квартира', 'house': 'дом', 'bungalo': 'бунгало' };
   var mapCard = document.querySelector('.map__card');
-  mapCard.classList.add('delete_advert');
+  var fragmentMarker = document.createDocumentFragment();
 
-  window.load(onHousesSuccess);
-
-  function onHousesSuccess(houses) {
-    renderPinHouses(houses);
-    fillHouseAdvert(houses, addPinClickHandler);
-  }
-
-  function renderPinHouses(houses) {
-    var fragmentMarker = document.createDocumentFragment();
-    for (var i = 0; i < houses.length; i++) {
-      fragmentMarker.appendChild(renderHouse(houses[i]));
-
-    }
-    mapPins.appendChild(fragmentMarker);
-  }
+  window.data = {
+    renderPinHouses: function (houses) {
+      burnAllHouse();
+      var takeNumber = houses.length > 5 ? 5 : houses.length;
+      for (var i = 0; i < takeNumber; i++) {
+        renderHouse(houses[i]);
+        addPinClickHandler(mapPins.children[i + 2], houses[i]);
+      }
+    },
+    ENTER_KEYCODE: 13,
+    ESCAPE_KEYCODE: 27,
+    mapPinMain: document.querySelector('.map__pin--main'),
+    cardGlobal: cardGlobal,
+    adForm: document.querySelector('.ad-form'),
+    mapPins: mapPins,
+    adds: document.querySelector('#address'),
+    mapCard: mapCard,
+    templateMarker: templateMarker
+  };
 
   function renderHouse(houseUnit) {
     var element = templateMarker.cloneNode(true);
     element.style.left = houseUnit.location.x + 'px';
     element.style.top = houseUnit.location.y + 'px';
     element.getElementsByTagName('img')[0].src = houseUnit.author.avatar;
-    element.classList.add('delete_advert');
-    return element;
-  }
-
-  function fillHouseAdvert(houses, handler) {
-    for (var i = 0; i < houses.length; i++) {
-      handler(mapPins.children[i + 2], houses[i]);
-    }
+    fragmentMarker.appendChild(element);
+    mapPins.appendChild(fragmentMarker);
   }
 
   function addPinClickHandler(pin, building) {
@@ -65,14 +58,10 @@
     });
   }
 
-  window.data = {
-    ENTER_KEYCODE: ENTER_KEYCODE,
-    ESCAPE_KEYCODE: ESCAPE_KEYCODE,
-    mapPinMain: mapPinMain,
-    cardGlobal: cardGlobal,
-    adForm: adForm,
-    mapPins: mapPins,
-    adds: adds,
-    mapCard: mapCard
-  };
+  function burnAllHouse() {
+    for (var i = mapPins.children.length - 1; i > 1; i--) {
+      mapPins.children[i].remove();
+    }
+  }
+
 })();
