@@ -56,6 +56,11 @@
     upadateHouses();
   });
 
+  housingRooms.addEventListener('change', function () {
+    roomOfBuild = housingRooms.value;
+    upadateHouses();
+  });
+
   function onHousesSuccess(houses) {
     BUILDINGS = houses;
     upadateHouses();
@@ -70,7 +75,7 @@
   //   if (checkbox.checked) {
   //     console.log('you need to be fluent in English to apply for the job');
   //   } else {
-  //     console.log('иди на хер');
+  //     console.log('');
   //   }
   // });
 
