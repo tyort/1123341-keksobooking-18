@@ -12,6 +12,7 @@
   var housingType = document.getElementById('housing-type');
   var housingPrice = document.getElementById('housing-price');
   var housingRooms = document.getElementById('housing-rooms');
+  var housingGuests = document.getElementById('housing-guests');
 
   function upadateHouses() {
     var TYPEBUILDINGS = BUILDINGS.filter(function (it) {
@@ -29,6 +30,7 @@
     var ARRAYsecond = roomOfBuild === 'any' ? PRICEBUILDINGS : ROOMBUILDINGS;
     console.log(ROOMBUILDINGS);
 
+    var GUESTBUILDINGS = ARRAYsecond.filter(function (it))
 
     window.data.renderPinHouses(ARRAYsecond);
     window.deleteClassName('map__pin', 0, 'delete_advert');
@@ -56,8 +58,8 @@
     upadateHouses();
   });
 
-  housingRooms.addEventListener('change', function () {
-    roomOfBuild = housingRooms.value;
+  housingGuests.addEventListener('change', function () {
+    guestOfBuild = housingGuests.value;
     upadateHouses();
   });
 
