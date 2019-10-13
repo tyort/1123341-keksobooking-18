@@ -2,30 +2,65 @@
 'use strict';
 
 (function () {
-  var typeofBuild;
+  var typeOfBuild;
+  var priceOfBuild;
+  var roomOfBuild;
+  var maxPrice;
+  var minPrice;
+  var pricesLimit = [{name: 'any', min: 0, max: 1000000000}, {name: 'low', min: 0, max: 10000}, {name: 'middle', min: 10000, max: 50000}, {name: 'high', min: 50000, max: 1000000000}];
   var BUILDINGS = [];
   var housingType = document.getElementById('housing-type');
+  var housingPrice = document.getElementById('housing-price');
+  var housingRooms = document.getElementById('housing-rooms');
 
   function upadateHouses() {
-    var sameTypeHouse = BUILDINGS.filter(function (it) {
-      return it.offer.type === typeofBuild;
+    var TYPEBUILDINGS = BUILDINGS.filter(function (it) {
+      return it.offer.type === typeOfBuild;
     });
-    window.data.renderPinHouses(typeofBuild === 'any' ? BUILDINGS : sameTypeHouse);
+    var ARRAYfirst = typeOfBuild === 'any' ? BUILDINGS : TYPEBUILDINGS;
+
+    var PRICEBUILDINGS = ARRAYfirst.filter(function (it) {
+      return it.offer.price > minPrice && it.offer.price < maxPrice;
+    });
+
+    var ROOMBUILDINGS = PRICEBUILDINGS.filter(function (it) {
+      return it.offer.rooms === Number(roomOfBuild);
+    });
+    var ARRAYsecond = roomOfBuild === 'any' ? PRICEBUILDINGS : ROOMBUILDINGS;
+    console.log(ROOMBUILDINGS);
 
 
+    window.data.renderPinHouses(ARRAYsecond);
     window.deleteClassName('map__pin', 0, 'delete_advert');
+
   }
+
+
+  housingType.addEventListener('change', function () {
+    typeOfBuild = housingType.value;
+    upadateHouses();
+  });
+
+  housingPrice.addEventListener('change', function () {
+    priceOfBuild = pricesLimit.filter(function (it) {
+      return it.name === housingPrice.value;
+    });
+    maxPrice = priceOfBuild[0].max;
+    minPrice = priceOfBuild[0].min;
+    upadateHouses();
+
+  });
+
+  housingRooms.addEventListener('change', function () {
+    roomOfBuild = housingRooms.value;
+    upadateHouses();
+  });
 
   function onHousesSuccess(houses) {
     BUILDINGS = houses;
     upadateHouses();
     window.data.renderPinHouses(BUILDINGS);
   }
-
-  housingType.addEventListener('change', function () {
-    typeofBuild = housingType.value;
-    upadateHouses();
-  });
 
   window.load(onHousesSuccess);
 
