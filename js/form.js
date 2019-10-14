@@ -65,7 +65,7 @@
   userTitleInput.addEventListener('input', function (evt) {
     evt.preventDefault();
     var target = evt.target;
-    if (target.value.length < 15) {
+    if (target.value.length < 30) {
       target.setCustomValidity('Поднажми, друг. Еще несколько символов!');
     } else {
       target.setCustomValidity('');

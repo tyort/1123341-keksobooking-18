@@ -100,7 +100,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" minlength="15" maxlength="100" required>
+          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" minlength="30" maxlength="100" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес</label>
@@ -206,7 +206,7 @@
 
   <!-- Модальное окно с информацией об объявлении -->
   <template id="card">
-    <article class="map__card popup">
+    <article class="map__card popup delete_advert">
       <img src="img/avatars/default.png" class="popup__avatar" width="70" height="70" alt="Аватар пользователя">
       <button type="button" class="popup__close">Закрыть</button>
       <h3 class="popup__title">Уютное гнездышко для молодоженов</h3>
@@ -249,6 +249,6 @@
   <script src="js/dynamic.js"></script>
   <script src="js/form.js"></script>
   <script src="js/issue.js"></script>
-
+  <script src="js/filter.js"></script>
 </body>
 </html>

@@ -2,6 +2,7 @@
 
 (function () {
   var URLget = 'https://js.dump.academy/keksobooking/data';
+  var URLpost = 'https://js.dump.academy/keksobooking';
 
   window.load = function (onSuccess) {
     var xhr = new XMLHttpRequest();
@@ -26,8 +27,6 @@
     xhr.send();
   };
 
-
-  var URLpost = 'https://js.dump.academy/keksobooking';
 
   window.upload = function (data, onSuccess) {
     var xhr = new XMLHttpRequest();
