@@ -2,11 +2,24 @@
 'use strict';
 
 (function () {
-  var typeOfBuild;
-  var priceOfBuild;
-  var roomOfBuild;
-  var guestOfBuild;
-  var checkedFeatures;
+  var DEBOUNCE_INTERVAL = 500; // ms
+
+  var lastTimeout;
+  window.debounce = function (cb) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(cb, DEBOUNCE_INTERVAL);
+  };
+
+})();
+
+(function () {
+  var typeOfBuild = 'any';
+  var priceOfBuild = 'any';
+  var roomOfBuild = 'any';
+  var guestOfBuild = 'any';
+  var featureOfBuild = [];
   var maxPrice;
   var minPrice;
   // eslint-disable-next-line object-curly-spacing
@@ -19,46 +32,52 @@
   var table = document.getElementById('housing-features');
   var housingFeatures = Array.from(table.getElementsByTagName('input'));
 
+
   for (var i = 0; i < housingFeatures.length; i++) {
     renderFeature(housingFeatures[i]);
   }
 
-
   function upadateHouses() {
-    // console.log(BUILDINGS[0].offer.features.includes(checkedFeatures[0].value));
-    // console.log(BUILDINGS[0].offer.features.includes(checkedFeatures[1].value));
-    // console.log(BUILDINGS[0].offer.features.includes(checkedFeatures[2].value));
-    // console.log(BUILDINGS[0].offer.features.includes(checkedFeatures[3].value));
-    // console.log(BUILDINGS[0].offer.features.includes(checkedFeatures[4].value));
-    // console.log(BUILDINGS[0].offer.features.includes(checkedFeatures[5].value));
+    var pinsAfterFilter = BUILDINGS.slice();
 
-    var TYPEBUILDINGS = BUILDINGS.filter(function (it) {
-      return it.offer.type === typeOfBuild;
+    pinsAfterFilter = typeOfBuild === 'any'
+      ? pinsAfterFilter
+      : pinsAfterFilter.filter(function (it) {
+        return it.offer.type === typeOfBuild;
+      });
+
+    pinsAfterFilter = priceOfBuild === 'any'
+      ? pinsAfterFilter
+      : pinsAfterFilter.filter(function (it) {
+        return it.offer.price >= minPrice && it.offer.price <= maxPrice;
+      });
+
+    pinsAfterFilter = roomOfBuild === 'any'
+      ? pinsAfterFilter
+      : pinsAfterFilter.filter(function (it) {
+        return it.offer.rooms === Number(roomOfBuild);
+      });
+
+    pinsAfterFilter = guestOfBuild === 'any'
+      ? pinsAfterFilter
+      : pinsAfterFilter.filter(function (it) {
+        return it.offer.guests === Number(guestOfBuild);
+      });
+
+    pinsAfterFilter = pinsAfterFilter.filter(function (it) {
+      return featureOfBuild.every(function (item) {
+        return it.offer.features.includes(item);
+      });
     });
-    var ARRAYfirst = typeOfBuild === 'any' ? BUILDINGS : TYPEBUILDINGS;
 
-    var PRICEBUILDINGS = ARRAYfirst.filter(function (it) {
-      return it.offer.price >= minPrice && it.offer.price <= maxPrice;
-    });
-
-    var ROOMBUILDINGS = PRICEBUILDINGS.filter(function (it) {
-      return it.offer.rooms === Number(roomOfBuild);
-    });
-    var ARRAYsecond = roomOfBuild === 'any' ? PRICEBUILDINGS : ROOMBUILDINGS;
-
-    var GUESTBUILDINGS = ARRAYsecond.filter(function (it) {
-      return it.offer.guests === Number(guestOfBuild);
-    });
-    var ARRAYthird = guestOfBuild === 'any' ? ARRAYsecond : GUESTBUILDINGS;
-
-    window.data.renderPinHouses(ARRAYthird);
+    window.data.renderPinHouses(pinsAfterFilter);
     window.deleteClassName('map__pin', 0, 'delete_advert');
-
   }
-
+  var lastTimeout;
   housingType.addEventListener('change', function () {
     typeOfBuild = housingType.value;
-    upadateHouses();
+
+    window.debounce(upadateHouses);
   });
 
   housingPrice.addEventListener('change', function () {
@@ -67,38 +86,35 @@
     });
     maxPrice = priceOfBuild[0].max;
     minPrice = priceOfBuild[0].min;
-    upadateHouses();
 
+    window.debounce(upadateHouses);
   });
 
   housingRooms.addEventListener('change', function () {
     roomOfBuild = housingRooms.value;
-    upadateHouses();
+
+    window.debounce(upadateHouses);
   });
 
   housingGuests.addEventListener('change', function () {
     guestOfBuild = housingGuests.value;
-    upadateHouses();
+
+    window.debounce(upadateHouses);
   });
-
-
-  var sched = {
-    'wifi': true,
-    'dishwasher': true,
-    'parking': true,
-    'washer': true,
-    'elevator': true,
-    'conditioner': true
-  };
 
   function renderFeature(feature) {
     feature.addEventListener('change', function () {
-      yesOrno = feature.checked ? true : false;
-      console.log(yesOrno);
-      upadateHouses();
+      if (feature.checked && !featureOfBuild.includes(feature.value)) {
+        featureOfBuild.push(feature.value);
+      } else {
+        featureOfBuild.splice(featureOfBuild.indexOf(feature.value), 1);
+      }
+
+      window.debounce(upadateHouses);
     });
   }
 
+  console.log(lastTimeout);
   function onHousesSuccess(houses) {
     BUILDINGS = houses;
     upadateHouses();
@@ -108,13 +124,3 @@
   window.load(onHousesSuccess);
 
 })();
-
-// table.addEventListener('change', function () {
-//   checkedFeatures = housingFeatures.filter(function (it) {
-//     return it.checked === true;
-//   });
-//   upadateHouses();
-// });
-
-
-// housingFeatures[0]
