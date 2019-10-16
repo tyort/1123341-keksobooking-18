@@ -8,7 +8,7 @@
       window.data.mapPinMain.style.left = 520 + 'px';
       window.data.mapPinMain.style.top = 320 + 'px';
       window.fillAdress(parseInt(window.data.mapPinMain.style.left, 10), parseInt(window.data.mapPinMain.style.top, 10), window.data.adds);
-      window.data.adForm.reset(); // обновляет форму
+      window.data.adForm.reset();
       window.addClassName('map__pin', 1, 'delete_advert');
       window.addClassName('map__card', 0, 'delete_advert');
       window.addClassName('ad-form', 0, 'ad-form--disabled');

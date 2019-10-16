@@ -228,6 +228,7 @@ fieldset {
   height: 65px;
 
   cursor: move;
+  z-index: 10;
 }
 
 .map__pin--main img {

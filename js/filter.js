@@ -15,15 +15,20 @@
 })();
 
 (function () {
-  var typeOfBuild = 'any';
-  var priceOfBuild = 'any';
-  var roomOfBuild = 'any';
-  var guestOfBuild = 'any';
+  var ANY = 'any';
+  var typeOfBuild = ANY;
+  var priceOfBuild = ANY;
+  var roomOfBuild = ANY;
+  var guestOfBuild = ANY;
   var featureOfBuild = [];
   var maxPrice;
   var minPrice;
-  // eslint-disable-next-line object-curly-spacing
-  var pricesLimit = [{ name: 'any', min: 0, max: 1000000000 }, { name: 'low', min: 0, max: 10000 }, { name: 'middle', min: 10000, max: 50000 }, { name: 'high', min: 50000, max: 1000000000 }];
+  var pricesLimit = [
+    {name: 'any', min: 0, max: 1000000000},
+    {name: 'low', min: 0, max: 10000},
+    {name: 'middle', min: 10000, max: 50000},
+    {name: 'high', min: 50000, max: 1000000000}
+  ];
   var BUILDINGS = [];
   var housingType = document.getElementById('housing-type');
   var housingPrice = document.getElementById('housing-price');
@@ -34,31 +39,31 @@
 
 
   for (var i = 0; i < housingFeatures.length; i++) {
-    renderFeature(housingFeatures[i]);
+    addFeatureEventListener(housingFeatures[i]);
   }
 
   function upadateHouses() {
     var pinsAfterFilter = BUILDINGS.slice();
 
-    pinsAfterFilter = typeOfBuild === 'any'
+    pinsAfterFilter = typeOfBuild === ANY
       ? pinsAfterFilter
       : pinsAfterFilter.filter(function (it) {
         return it.offer.type === typeOfBuild;
       });
 
-    pinsAfterFilter = priceOfBuild === 'any'
+    pinsAfterFilter = priceOfBuild === ANY
       ? pinsAfterFilter
       : pinsAfterFilter.filter(function (it) {
         return it.offer.price >= minPrice && it.offer.price <= maxPrice;
       });
 
-    pinsAfterFilter = roomOfBuild === 'any'
+    pinsAfterFilter = roomOfBuild === ANY
       ? pinsAfterFilter
       : pinsAfterFilter.filter(function (it) {
         return it.offer.rooms === Number(roomOfBuild);
       });
 
-    pinsAfterFilter = guestOfBuild === 'any'
+    pinsAfterFilter = guestOfBuild === ANY
       ? pinsAfterFilter
       : pinsAfterFilter.filter(function (it) {
         return it.offer.guests === Number(guestOfBuild);
@@ -73,7 +78,7 @@
     window.data.renderPinHouses(pinsAfterFilter);
     window.deleteClassName('map__pin', 0, 'delete_advert');
   }
-  var lastTimeout;
+
   housingType.addEventListener('change', function () {
     typeOfBuild = housingType.value;
 
@@ -81,11 +86,11 @@
   });
 
   housingPrice.addEventListener('change', function () {
-    priceOfBuild = pricesLimit.filter(function (it) {
+    priceOfBuild = pricesLimit.find(function (it) {
       return it.name === housingPrice.value;
     });
-    maxPrice = priceOfBuild[0].max;
-    minPrice = priceOfBuild[0].min;
+    maxPrice = priceOfBuild.max;
+    minPrice = priceOfBuild.min;
 
     window.debounce(upadateHouses);
   });
@@ -102,7 +107,7 @@
     window.debounce(upadateHouses);
   });
 
-  function renderFeature(feature) {
+  function addFeatureEventListener(feature) {
     feature.addEventListener('change', function () {
       if (feature.checked && !featureOfBuild.includes(feature.value)) {
         featureOfBuild.push(feature.value);
@@ -114,7 +119,6 @@
     });
   }
 
-  console.log(lastTimeout);
   function onHousesSuccess(houses) {
     BUILDINGS = houses;
     upadateHouses();

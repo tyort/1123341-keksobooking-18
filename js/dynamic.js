@@ -77,7 +77,6 @@
     getEnabledForm(mapFilters);
     window.data.cardGlobal.classList.remove('map--faded');
     window.data.adForm.classList.remove('ad-form--disabled');
-    window.deleteClassName('map__card', 0, 'delete_advert');
     window.deleteClassName('map__pin', 0, 'delete_advert');
   }
 
@@ -98,3 +97,46 @@
   }
 
 })();
+
+
+// (function () {
+
+//   var Wizard = function (name, skill) {
+//     this.name = name;
+//     this.skill = skill;
+//     this.fire = function () {
+//       var baseFireballSize = 10;
+//       var fireballSize = baseFireballSize * this.skill;
+//       console.log('Огненный шар размером: ' + fireballSize);
+//     };
+//   };
+
+//   var gendalfWizard = new Wizard('Гендальф', 5);
+//   var sauronWizard = new Wizard('Саурон', 10);
+
+//   gendalfWizard.fire(); // Огненный шар размером 50
+//   sauronWizard.fire(); // Огненный шар размером 100
+
+//   console.log(gendalfWizard.fire === sauronWizard.fire); // false
+//   // --------------------------------------------------------------------
+
+//   var Wizard = function (name, skill) {
+//     this.name = name;
+//     this.skill = skill;
+//   };
+
+//   Wizard.prototype.fire = function () { // если пишем prototype, то эта ф-ия досупна для всех объектов, вызывающих конструктор
+//     var baseFireballSize = 10;
+//     var fireballSize = baseFireballSize * this.skill;
+//     console.log('Огненный шар размером: ' + fireballSize);
+//   };
+
+//   var gendalfWizard = new Wizard('Гендальф', 5);
+//   var sauronWizard = new Wizard('Саурон', 10);
+
+//   gendalfWizard.fire(); // Огненный шар размером 50
+//   sauronWizard.fire(); // Огненный шар размером 100
+
+//   console.log(gendalfWizard.fire === sauronWizard.fire); // true
+//   console.log(gendalfWizard.__proto__ === Wizard.prototype); // true
+// })();
