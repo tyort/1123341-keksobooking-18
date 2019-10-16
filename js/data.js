@@ -7,15 +7,20 @@
   var templateWindow = document.querySelector('#card').content.querySelector('article');
   var templateMarker = document.querySelector('#pin').content.querySelector('button');
   cardGlobal.insertBefore(templateWindow.cloneNode(true), cardGlobal.querySelector('.map__filters-container'));
-  // eslint-disable-next-line object-curly-spacing
-  var TYPES_TEXTS_MAP = { 'palace': 'дворец', 'flat': 'квартира', 'house': 'дом', 'bungalo': 'бунгало' };
+  var TYPES_TEXTS_MAP = {
+    'palace': 'дворец',
+    'flat': 'квартира',
+    'house': 'дом',
+    'bungalo': 'бунгало'
+  };
   var mapCard = document.querySelector('.map__card');
+  var advertClose = mapCard.querySelector('.popup__close');
   var fragmentMarker = document.createDocumentFragment();
 
   window.data = {
     renderPinHouses: function (houses) {
-      burnAllHouse();
-      var takeNumber = houses.length > 5 ? 5 : houses.length;
+      removeAllPins();
+      var takeNumber = Math.min(houses.length, 5);
       for (var i = 0; i < takeNumber; i++) {
         renderHouse(houses[i]);
         addPinClickHandler(mapPins.children[i + 2], houses[i]);
@@ -37,12 +42,14 @@
     element.style.left = houseUnit.location.x + 'px';
     element.style.top = houseUnit.location.y + 'px';
     element.getElementsByTagName('img')[0].src = houseUnit.author.avatar;
+    element.className = 'delete_advert map__pin';
     fragmentMarker.appendChild(element);
     mapPins.appendChild(fragmentMarker);
   }
 
   function addPinClickHandler(pin, building) {
     pin.addEventListener('click', function () {
+      window.deleteClassName('map__card', 0, 'delete_advert');
       mapCard.children[8].innerHTML = '';
       mapCard.children[10].innerHTML = '';
       mapCard.children[0].src = building.author.avatar;
@@ -58,10 +65,22 @@
     });
   }
 
-  function burnAllHouse() {
+  function removeAllPins() {
     for (var i = mapPins.children.length - 1; i > 1; i--) {
       mapPins.children[i].remove();
     }
   }
+
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.data.ESCAPE_KEYCODE && !mapCard.classList.contains('delete_advert')) {
+      mapCard.classList.add('delete_advert');
+    }
+  });
+
+  advertClose.addEventListener('click', function () {
+    if (!mapCard.classList.contains('delete_advert')) {
+      mapCard.classList.add('delete_advert');
+    }
+  });
 
 })();
