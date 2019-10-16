@@ -7,7 +7,6 @@
 
   var fileChooser = document.querySelector('.ad-form__field input[type=file]');
   var preview = document.querySelector('.ad-form-header__preview img');
-  console.log(preview);
 
   fileChooser.addEventListener('change', function () {
     var file = fileChooser.files[0];
