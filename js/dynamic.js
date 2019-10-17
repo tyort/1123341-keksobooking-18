@@ -12,45 +12,36 @@
   window.data.mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     activatePage();
-    window.fillAdress(parseInt(window.data.mapPinMain.style.left, 10), parseInt(window.data.mapPinMain.style.top, 10), window.data.adds);
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-    console.log(startCoords);
+    var startCoords = new Coordinate(null, evt.clientX, evt.clientY);
+
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
+      var shift = new Coordinate(null, startCoords.X - moveEvt.clientX, startCoords.Y - moveEvt.clientY);
+      var newLocation = new Coordinate(new Rect(0, 100, 1140, 630), window.data.mapPinMain.offsetLeft - shift.X, window.data.mapPinMain.offsetTop - shift.Y);
+      startCoords = new Coordinate(null, moveEvt.clientX, moveEvt.clientY);
+      window.data.mapPinMain.style.left = newLocation.X;
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
-      var newLocationY = window.data.mapPinMain.offsetTop - shift.y;
-      var newLocationX = window.data.mapPinMain.offsetLeft - shift.x;
+      window.data.mapPinMain.style.left = Number(newLocation.X) + 'px'; // todo не ограничивает движение маркера
+      window.data.mapPinMain.style.top = Number(newLocation.Y) + 'px'; // todo не ограничивает движение маркера
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
+      // if (newLocation.X < 0) {
+      //   window.data.mapPinMain.style.left = 0 + 'px';
+      // } else if (newLocation.X > 1140) {
+      //   window.data.mapPinMain.style.left = 1140 + 'px';
+      // } else {
+      //   window.data.mapPinMain.style.left = newLocation.X + 'px';
+      // }
 
-      if (newLocationX < 0) {
-        window.data.mapPinMain.style.left = 0 + 'px';
-      } else if (newLocationX > 1140) {
-        window.data.mapPinMain.style.left = 1140 + 'px';
-      } else {
-        window.data.mapPinMain.style.left = newLocationX + 'px';
-      }
+      // if (newLocation.Y < 100) {
+      //   window.data.mapPinMain.style.top = 100 + 'px';
+      // } else if (newLocation.Y > 630) {
+      //   window.data.mapPinMain.style.top = 630 + 'px';
+      // } else {
+      //   window.data.mapPinMain.style.top = newLocation.Y + 'px';
+      // }
 
-      if (newLocationY < 100) {
-        window.data.mapPinMain.style.top = 100 + 'px';
-      } else if (newLocationY > 630) {
-        window.data.mapPinMain.style.top = 630 + 'px';
-      } else {
-        window.data.mapPinMain.style.top = newLocationY + 'px';
-      }
-
-      window.fillAdress(parseInt(window.data.mapPinMain.style.left, 10), parseInt(window.data.mapPinMain.style.top, 10), window.data.adds);
+      window.fillAdress(Number(newLocation.X), Number(newLocation.Y), window.data.adds);
 
     };
 
@@ -77,6 +68,7 @@
     window.data.cardGlobal.classList.remove('map--faded');
     window.data.adForm.classList.remove('ad-form--disabled');
     window.deleteClassName('map__pin', 0, 'delete_advert');
+    window.fillAdress(parseInt(window.data.mapPinMain.style.left, 10), parseInt(window.data.mapPinMain.style.top, 10), window.data.adds);
   }
 
   function getDisabledForm(form) {
@@ -95,47 +87,34 @@
     }
   }
 
+  function Rect(left, top, right, bottom) {
+    this.left = left;
+    this.top = top;
+    this.right = right;
+    this.bottom = bottom;
+  }
+
+  function Coordinate(constraints, x, y) {
+    this.X = x;
+    this.Y = y;
+    this._constraints = constraints;
+  }
+
+  Coordinate.prototype.setX = function (x) {
+    if (x >= this._constraints.left &&
+      x <= this._constraints.right) {
+      this.X = x;
+    }
+  };
+
+  Coordinate.prototype.setY = function (y) {
+    if (y >= this._constraints.top &&
+      y <= this._constraints.bottom) {
+      this.Y = y;
+    }
+  };
+
+
 })();
 
 
-// (function () {
-
-//   var Wizard = function (name, skill) {
-//     this.name = name;
-//     this.skill = skill;
-//     this.fire = function () {
-//       var baseFireballSize = 10;
-//       var fireballSize = baseFireballSize * this.skill;
-//       console.log('Огненный шар размером: ' + fireballSize);
-//     };
-//   };
-
-//   var gendalfWizard = new Wizard('Гендальф', 5);
-//   var sauronWizard = new Wizard('Саурон', 10);
-
-//   gendalfWizard.fire(); // Огненный шар размером 50
-//   sauronWizard.fire(); // Огненный шар размером 100
-
-//   console.log(gendalfWizard.fire === sauronWizard.fire); // false
-//   // --------------------------------------------------------------------
-
-//   var Wizard = function (name, skill) {
-//     this.name = name;
-//     this.skill = skill;
-//   };
-
-//   Wizard.prototype.fire = function () { // если пишем prototype, то эта ф-ия досупна для всех объектов, вызывающих конструктор
-//     var baseFireballSize = 10;
-//     var fireballSize = baseFireballSize * this.skill;
-//     console.log('Огненный шар размером: ' + fireballSize);
-//   };
-
-//   var gendalfWizard = new Wizard('Гендальф', 5);
-//   var sauronWizard = new Wizard('Саурон', 10);
-
-//   gendalfWizard.fire(); // Огненный шар размером 50
-//   sauronWizard.fire(); // Огненный шар размером 100
-
-//   console.log(gendalfWizard.fire === sauronWizard.fire); // true
-//   console.log(gendalfWizard.__proto__ === Wizard.prototype); // true
-// })();
