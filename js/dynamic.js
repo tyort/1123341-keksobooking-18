@@ -12,14 +12,13 @@
   window.data.mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     activatePage();
-
     window.fillAdress(parseInt(window.data.mapPinMain.style.left, 10), parseInt(window.data.mapPinMain.style.top, 10), window.data.adds);
 
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
     };
-
+    console.log(startCoords);
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
