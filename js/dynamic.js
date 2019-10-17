@@ -20,8 +20,7 @@
       var shift = new Coordinate(null, startCoords.X - moveEvt.clientX, startCoords.Y - moveEvt.clientY);
       var newLocation = new Coordinate(new Rect(0, 100, 1140, 630), window.data.mapPinMain.offsetLeft - shift.X, window.data.mapPinMain.offsetTop - shift.Y);
       startCoords = new Coordinate(null, moveEvt.clientX, moveEvt.clientY);
-      window.data.mapPinMain.style.left = newLocation.X;
-
+      
       window.data.mapPinMain.style.left = Number(newLocation.X) + 'px'; // todo не ограничивает движение маркера
       window.data.mapPinMain.style.top = Number(newLocation.Y) + 'px'; // todo не ограничивает движение маркера
 
