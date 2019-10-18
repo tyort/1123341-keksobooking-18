@@ -6,7 +6,7 @@
     window.upload(new FormData(window.data.adForm), function () {
       window.data.mapPinMain.style.left = 570 + 'px';
       window.data.mapPinMain.style.top = 315 + 'px';
-      window.fillAdress(Number(window.data.mapPinMain.style.left), Number(window.data.mapPinMain.style.top), window.data.adds);
+      window.fillAdress(570, 315, window.data.adds);
       window.data.adForm.reset();
       window.addClassName('map__pin', 1, 'delete_advert');
       window.addClassName('map__card', 0, 'delete_advert');
