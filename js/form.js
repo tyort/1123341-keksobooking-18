@@ -1,5 +1,3 @@
-/* eslint-disable no-redeclare */
-/* eslint-disable no-console */
 'use strict';
 
 (function () {
