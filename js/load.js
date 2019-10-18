@@ -58,7 +58,6 @@
     var axisY = y + 79;
     if (window.data.cardGlobal.classList.contains('map--faded')) {
       part = 'центра';
-      axisX = x + 35;
       axisY = y + 35;
     }
     var adressText = axisX + ' расстояние до ' + part + ' по горизонтали, ' + axisY + ' расстояние до ' + part + ' по вертикали';
