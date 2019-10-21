@@ -3,13 +3,23 @@
 (function () {
   var URL_GET_OFFERS = 'https://js.dump.academy/keksobooking/data';
   var URL_SAVE_OFFER = 'https://js.dump.academy/keksobooking';
+  var waitLoadTime = 10000; // мс
+  var waitUploadtime = 3000; // мс
+  var answerFromServer = 200;
+
+  function onHousesError() {
+    var templateError = document.querySelector('#error').content.querySelector('div');
+    var node = templateError.cloneNode(true);
+    document.getElementsByTagName('main')[0].insertAdjacentElement('afterbegin', node);
+    return node;
+  }
 
   window.load = function (onSuccess) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === answerFromServer) {
         onSuccess(xhr.response);
       } else {
         onHousesError();
@@ -22,7 +32,7 @@
       onHousesError();
     });
 
-    xhr.timeout = 10000; // 10s
+    xhr.timeout = waitLoadTime;
     xhr.open('GET', URL_GET_OFFERS);
     xhr.send();
   };
@@ -33,7 +43,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === answerFromServer) {
         onSuccess(xhr.response);
       } else {
         onHousesError();
@@ -46,7 +56,7 @@
       onHousesError();
     });
 
-    xhr.timeout = 3000; // 3s
+    xhr.timeout = waitUploadtime;
     xhr.open('POST', URL_SAVE_OFFER);
     xhr.send(data);
   };
@@ -115,12 +125,21 @@
     }
   };
 
-  function onHousesError() {
-    var templateError = document.querySelector('#error').content.querySelector('div');
-    var node = templateError.cloneNode(true);
-    document.getElementsByTagName('main')[0].insertAdjacentElement('afterbegin', node);
-    return node;
-  }
+  window.getDisabledForm = function (form) {
+    for (var j = 0; j < form.children.length; j++) {
+      if (!form.children[j].getAttribute('disabled')) {
+        form.children[j].setAttribute('disabled', 'disabled');
+      }
+    }
+  };
+
+  window.getEnabledForm = function (form) {
+    for (var j = 0; j < form.children.length; j++) {
+      if (form.children[j].getAttribute('disabled')) {
+        form.children[j].removeAttribute('disabled');
+      }
+    }
+  };
 
 })();
 

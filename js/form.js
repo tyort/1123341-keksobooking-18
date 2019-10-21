@@ -22,17 +22,17 @@
 
     function getFlatAmount(flatAmount) {
       if (Number(selectRooms.value) === flatAmount && Number(selectRooms.value) !== 100) {
-        getRefreshAttribute(selectGuests);
+        window.getDisabledForm(selectGuests);
         selectGuests.value = 1;
         for (var i = 0; i < options.length; i++) {
-          options[i].disabled = Number(options[i].value) > Math.ceil(flatAmount * 1.5);
+          options[i].disabled = Number(options[i].value) > flatAmount;
         }
       }
     }
 
     if (Number(selectRooms.value) === 100) {
       selectGuests.value = 100;
-      getRefreshAttribute(selectGuests);
+      window.getDisabledForm(selectGuests);
       for (var i = 0; i < options.length; i++) {
         options[i].disabled = Number(options[i].value) < 100;
       }
@@ -43,12 +43,6 @@
     var selectedType = type.value;
     document.getElementById('price').min = TYPES_PRICES_MAP[selectedType];
   });
-
-  function getRefreshAttribute(array) {
-    for (var m = 0; m < array.children.length; m++) {
-      array.children[m].removeAttribute('disabled');
-    }
-  }
 
   userTitleInput.addEventListener('invalid', function () {
     if (userTitleInput.validity.tooShort) {
@@ -61,7 +55,6 @@
   });
 
   userTitleInput.addEventListener('input', function (evt) {
-    evt.preventDefault();
     var target = evt.target;
     if (target.value.length < 30) {
       target.setCustomValidity('Поднажми, друг. Еще несколько символов!');

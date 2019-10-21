@@ -1250,11 +1250,6 @@ fieldset {
   opacity: 0.6;
 }
 /* мои добавки */
-input:invalid{
-  border-color: #900;
-  background-color: #FDD;
-}
-
 .delete_advert {
   display: none;
 }

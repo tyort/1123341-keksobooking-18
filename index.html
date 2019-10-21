@@ -23,7 +23,7 @@
         <div class="map__overlay">
           <h2 class="map__title">И снова Токио!</h2>
         </div>
-        <button class="map__pin map__pin--main" style="left: 520px; top: 320px;">
+        <button class="map__pin map__pin--main" style="left: 570px; top: 315px;">
           <img src="img/muffin-red.svg" width="40" height="44" draggable="false" alt="Метка объявления">
           <svg viewBox="0 0 70 70" width="156" height="156" aria-label="Метка для поиска жилья">
             <defs>
@@ -145,11 +145,9 @@
           <label class="ad-form__label" for="capacity">Количество мест</label>
           <select id="capacity" name="capacity">
             <option value="1" selected>для 1 гостя</option>
-            <option value="2">для 2 гостей</option>
+            <option value="2" disabled>для 2 гостей</option>
             <option value="3" disabled>для 3 гостей</option>
-            <option value="4" disabled>для 4 гостей</option>
-            <option value="5" disabled>для 5 гостей</option>
-            <option value="100" disabled>только для котов</option>
+            <option value="100" disabled>не для гостей</option>
           </select>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide features">
@@ -248,9 +246,9 @@
   </template>
   <script src="js/load.js"></script>
   <script src="js/data.js"></script>
-  <script src="js/dynamic.js"></script>
+  <script src="js/map.js"></script>
   <script src="js/form.js"></script>
-  <script src="js/issue.js"></script>
+  <script src="js/submit.js"></script>
   <script src="js/debounce.js"></script>
   <script src="js/filter.js"></script>
   <script src="js/housesupdate.js"></script>

@@ -2,12 +2,10 @@
 
 (function () {
 
-  var mapFilters = document.querySelector('.map__filters');
-  var pinLocation = new Coordinate(new Rect(0, 100, 1140, 630), 570, 315);
+  var pinLocation = new Coordinate(new Rect(0, 100, 1140, 630), window.data.PIN_START_X, window.data.PIN_START_Y);
 
   window.data.mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-    activatePage();
 
     var startCoords = new Coordinate(null, evt.clientX, evt.clientY);
     var onMouseMove = function (moveEvt) {
@@ -32,42 +30,53 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  window.data.mapPinMain.addEventListener('click', function () {
+    if (window.data.cardGlobal.classList.contains('map--faded')) {
+      activatePage();
+    }
+  });
+
   window.data.mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.data.ENTER_KEYCODE) {
       activatePage();
-      window.fillAdress(pinLocation.X, pinLocation.Y, window.data.adds);
+    }
+  });
+
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.data.ESCAPE_KEYCODE && !window.data.mapCard.classList.contains('delete_advert')) {
+      window.data.mapCard.classList.add('delete_advert');
+    }
+  });
+
+  window.data.advertClose.addEventListener('click', function () {
+    if (!window.data.mapCard.classList.contains('delete_advert')) {
+      window.data.mapCard.classList.add('delete_advert');
+    }
+  });
+
+  window.data.mapFiltersContainer.addEventListener('click', function () {
+    if (!window.data.mapCard.classList.contains('delete_advert')) {
+      window.data.mapCard.classList.add('delete_advert');
     }
   });
 
   window.addEventListener('load', function () {
-    window.fillAdress(pinLocation.X, pinLocation.Y, window.data.adds);
-    getDisabledForm(window.data.adForm);
-    getDisabledForm(mapFilters);
+    window.fillAdress(window.data.PIN_START_X, window.data.PIN_START_Y, window.data.adds);
+    window.getDisabledForm(window.data.adForm);
+    window.getDisabledForm(window.data.mapFilters);
   });
 
   function activatePage() {
-    getEnabledForm(window.data.adForm);
-    getEnabledForm(mapFilters);
+    window.load(loadSuccess);
+    window.getEnabledForm(window.data.adForm);
+    window.getEnabledForm(window.data.mapFilters);
     window.data.cardGlobal.classList.remove('map--faded');
     window.data.adForm.classList.remove('ad-form--disabled');
-    window.deleteClassName('map__pin', 0, 'delete_advert');
-    window.fillAdress(pinLocation.X, pinLocation.Y, window.data.adds);
+    window.fillAdress(window.data.PIN_START_X, window.data.PIN_START_Y, window.data.adds);
   }
 
-  function getDisabledForm(form) {
-    for (var j = 0; j < form.children.length; j++) {
-      if (!form.children[j].getAttribute('disabled')) {
-        form.children[j].setAttribute('disabled', 'disabled');
-      }
-    }
-  }
-
-  function getEnabledForm(form) {
-    for (var j = 0; j < form.children.length; j++) {
-      if (form.children[j].getAttribute('disabled')) {
-        form.children[j].removeAttribute('disabled');
-      }
-    }
+  function loadSuccess(houses) {
+    window.housesupdate.onHousesSuccess(houses);
   }
 
   function Rect(left, top, right, bottom) {

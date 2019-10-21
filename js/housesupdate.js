@@ -9,7 +9,15 @@
   var featureOfBuild = [];
   var BUILDINGS = [];
 
-  function upadateHouses() {
+  window.housesupdate = {
+    onHousesSuccess: function (houses) {
+      BUILDINGS = houses;
+      updateHouses();
+      window.data.renderPinHouses(BUILDINGS);
+    }
+  };
+
+  function updateHouses() {
     var pinsAfterFilter = BUILDINGS.slice();
 
     pinsAfterFilter = typeOfBuild === ANY
@@ -43,41 +51,33 @@
     });
 
     window.data.renderPinHouses(pinsAfterFilter);
-    window.deleteClassName('map__pin', 0, 'delete_advert');
   }
 
 
   window.onFeatureChange = window.debounce(function (par) {
     featureOfBuild = par;
-    upadateHouses();
+    updateHouses();
   });
 
   window.onTypeChange = window.debounce(function (par) {
     typeOfBuild = par;
-    upadateHouses();
+    updateHouses();
   });
 
   window.onPriceChange = window.debounce(function (par) {
     priceOfBuild = par;
-    upadateHouses();
+    updateHouses();
   });
 
   window.onRoomChange = window.debounce(function (par) {
     roomOfBuild = par;
-    upadateHouses();
+    updateHouses();
   });
 
   window.onGuestChange = window.debounce(function (par) {
     guestOfBuild = par;
-    upadateHouses();
+    updateHouses();
   });
 
-  function onHousesSuccess(houses) {
-    BUILDINGS = houses;
-    upadateHouses();
-    window.data.renderPinHouses(BUILDINGS);
-  }
-
-  window.load(onHousesSuccess);
 
 })();
