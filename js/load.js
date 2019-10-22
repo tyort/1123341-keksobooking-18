@@ -63,14 +63,9 @@
 
 
   window.fillAdress = function (x, y, element) {
-    var part = 'острого конца';
     var axisX = x + 35;
-    var axisY = y + 79;
-    if (window.data.cardGlobal.classList.contains('map--faded')) {
-      part = 'центра';
-      axisY = y + 35;
-    }
-    var adressText = axisX + ' расстояние до ' + part + ' по горизонтали, ' + axisY + ' расстояние до ' + part + ' по вертикали';
+    var axisY = window.data.cardGlobal.classList.contains('map--faded') ? y + 35 : y + 79;
+    var adressText = axisX + ', ' + axisY;
     element.setAttribute('value', adressText);
   };
 
