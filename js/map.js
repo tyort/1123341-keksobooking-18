@@ -76,7 +76,7 @@
   }
 
   function loadSuccess(houses) {
-    window.housesupdate.onHousesSuccess(houses);
+    window.pins.onHousesSuccess(houses);
   }
 
   function Rect(left, top, right, bottom) {

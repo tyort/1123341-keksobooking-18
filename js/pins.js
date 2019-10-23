@@ -9,7 +9,7 @@
   var featureOfBuild = [];
   var BUILDINGS = [];
 
-  window.housesupdate = {
+  window.pins = {
     onHousesSuccess: function (houses) {
       BUILDINGS = houses;
       updateHouses();

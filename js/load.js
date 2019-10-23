@@ -6,6 +6,8 @@
   var waitLoadTime = 10000; // мс
   var waitUploadtime = 3000; // мс
   var answerFromServer = 200;
+  var pinHand = 35;
+  var pinHandY = 79;
 
   function onHousesError() {
     var templateError = document.querySelector('#error').content.querySelector('div');
@@ -63,8 +65,8 @@
 
 
   window.fillAdress = function (x, y, element) {
-    var axisX = x + 35;
-    var axisY = window.data.cardGlobal.classList.contains('map--faded') ? y + 35 : y + 79;
+    var axisX = x + pinHand;
+    var axisY = window.data.cardGlobal.classList.contains('map--faded') ? y + pinHand : y + pinHandY;
     var adressText = axisX + ', ' + axisY;
     element.setAttribute('value', adressText);
   };
