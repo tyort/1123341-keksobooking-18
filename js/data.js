@@ -13,27 +13,38 @@
     'bungalo': 'бунгало'
   };
   var mapCard = document.querySelector('.map__card');
-  var advertClose = mapCard.querySelector('.popup__close');
   var fragmentMarker = document.createDocumentFragment();
 
   window.data = {
     renderPinHouses: function (houses) {
-      removeAllPins();
+      window.data.removeAllPins();
       var takeNumber = Math.min(houses.length, 5);
       for (var i = 0; i < takeNumber; i++) {
         renderHouse(houses[i]);
         addPinClickHandler(mapPins.children[i + 2], houses[i]);
       }
     },
+    removeAllPins: function () {
+      for (var i = mapPins.children.length - 1; i > 1; i--) {
+        mapPins.children[i].remove();
+      }
+    },
     ENTER_KEYCODE: 13,
     ESCAPE_KEYCODE: 27,
+    PIN_START_X: 570,
+    PIN_START_Y: 315,
     mapPinMain: document.querySelector('.map__pin--main'),
     cardGlobal: cardGlobal,
     adForm: document.querySelector('.ad-form'),
     mapPins: mapPins,
     adds: document.querySelector('#address'),
     mapCard: mapCard,
-    templateMarker: templateMarker
+    templateMarker: templateMarker,
+    mapFilters: document.querySelector('.map__filters'),
+    advertClose: mapCard.querySelector('.popup__close'),
+    previewAvatar: document.querySelector('.ad-form-header__preview img'),
+    previewInterior: document.querySelector('.ad-form__photo img'),
+    mapFiltersContainer: document.querySelector('.map__filters-container')
   };
 
   function renderHouse(houseUnit) {
@@ -41,7 +52,7 @@
     element.style.left = houseUnit.location.x + 'px';
     element.style.top = houseUnit.location.y + 'px';
     element.getElementsByTagName('img')[0].src = houseUnit.author.avatar;
-    element.className = 'delete_advert map__pin';
+    element.className = 'map__pin';
     fragmentMarker.appendChild(element);
     mapPins.appendChild(fragmentMarker);
   }
@@ -63,23 +74,4 @@
       window.getPhotosToDOM(mapCard.children[10], building.offer.photos);
     });
   }
-
-  function removeAllPins() {
-    for (var i = mapPins.children.length - 1; i > 1; i--) {
-      mapPins.children[i].remove();
-    }
-  }
-
-  document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.data.ESCAPE_KEYCODE && !mapCard.classList.contains('delete_advert')) {
-      mapCard.classList.add('delete_advert');
-    }
-  });
-
-  advertClose.addEventListener('click', function () {
-    if (!mapCard.classList.contains('delete_advert')) {
-      mapCard.classList.add('delete_advert');
-    }
-  });
-
 })();

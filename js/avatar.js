@@ -6,14 +6,12 @@
 
   var avatarChooser = document.querySelector('.ad-form__field input[type=file]');
   var interiorChooser = document.querySelector('.ad-form__upload input[type=file]');
-  var previewAvatar = document.querySelector('.ad-form-header__preview img');
-  var previewInterior = document.querySelector('.ad-form__photo img');
 
   avatarChooser.addEventListener('change', function () {
-    onPhotoChange(avatarChooser, previewAvatar);
+    onPhotoChange(avatarChooser, window.data.previewAvatar);
   });
   interiorChooser.addEventListener('change', function () {
-    onPhotoChange(interiorChooser, previewInterior);
+    onPhotoChange(interiorChooser, window.data.previewInterior);
   });
 
   function onPhotoChange(knob, image) {
